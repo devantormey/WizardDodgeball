@@ -239,6 +239,9 @@ environment = SubResource("Environment_yvn7g")
 
 [node name="Player1" parent="." instance=ExtResource("5_jwfhr")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 12.5295, 1, 14.3006)
+player_id = 1
+camera_toggle = true
 
 [node name="Player2" parent="." instance=ExtResource("5_jwfhr")]
 transform = Transform3D(0.999967, 0, 0.00813332, 0, 1, 0, -0.00813332, 0, 0.999967, 12.5295, 1, -20.9963)
+player_id = 2

@@ -1,5 +1,8 @@
 extends Node3D
 
+#Player ID:
+@export var player_id: int
+@export var camera_toggle: bool = false
 
 #~~~~ Skeletons
 @onready var physical_skel = $ActiveArmature/Armature/Skeleton3D
@@ -90,6 +93,7 @@ var vertical_rotation: float = 0.0 # Track vertical rotation to clamp within lim
 @onready var blink_timer = $BlinkTimer
 @onready var unblink_timer = $UnBlinkTimer
 @onready var look_timer = $LookTimer 
+
 @onready var face_animation_map = {
 	"forward": [0, 0],
 	"left": [0, 1],
@@ -99,10 +103,39 @@ var vertical_rotation: float = 0.0 # Track vertical rotation to clamp within lim
 }
 var current_expression = "forward"
 @onready var last_expression = "forward"
+
+# Player ID Input Map
+var input_map = {
+	1: {
+		"move_forward": "player1_move_forward",
+		"move_back": "player1_move_back",
+		"move_left": "player1_move_left",
+		"move_right": "player1_move_right",
+		"primary_action": "player1_primary_action",
+		"secondary_action": "player1_secondary_action",
+		"sprint": "player1_sprint",
+		"toggle_ragdoll": "player1_toggle_ragdoll"
+	},
+	2: {
+		"move_forward": "player2_move_forward",
+		"move_back": "player2_move_back",
+		"move_left": "player2_move_left",
+		"move_right": "player2_move_right",
+		"primary_action": "player2_primary_action",
+		"secondary_action": "player2_secondary_action",
+		"sprint": "player2_sprint",
+		"toggle_ragdoll": "player2_toggle_ragdoll"
+	}
+}
+
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #READY FUNCTION
 func _ready():
+	#set the camera up
+	camera_pivot.player_id = player_id
+	camera_pivot.camera.current = camera_toggle
 	# Initialize physical skeleton
 	physical_skel.physical_bones_start_simulation()
 	physics_bones = physical_skel.get_children().filter(func(x): return x is PhysicalBone3D)
@@ -162,11 +195,11 @@ func _process(_delta):
 	
 	if !ragdoll_mode:
 		move_character(_delta)
-		if Input.is_action_just_pressed("move_forward"):
+		if Input.is_action_just_pressed(input_map[player_id]["move_forward"]):
 			set_expression("forward")
-		elif Input.is_action_just_pressed("move_right"):
+		elif Input.is_action_just_pressed(input_map[player_id]["move_right"]):
 			set_expression("right")
-		elif Input.is_action_just_pressed("move_left"):
+		elif Input.is_action_just_pressed(input_map[player_id]["move_left"]):
 			set_expression("left")
 		
 		handle_camera_swivel(_delta)
@@ -184,7 +217,7 @@ func _process(_delta):
 #~~~~~~~~~~~~~~ Character Control Functions ~~~~~~~~~~~~~
 #input handling
 func handle_input(delta):
-	if Input.is_action_just_pressed("toggle_ragdoll"):
+	if Input.is_action_just_pressed(input_map[player_id]["toggle_ragdoll"]):
 		ragdoll_mode = !ragdoll_mode
 		if ragdoll_mode == false:
 			reset_bone_positions()
@@ -194,16 +227,16 @@ func handle_input(delta):
 		velocity = Vector3.ZERO
 
 		# Check for movement inputs
-		if Input.is_action_pressed("move_forward"):
+		if Input.is_action_pressed(input_map[player_id]["move_forward"]):
 			velocity.z += 1
-		if Input.is_action_pressed("move_back"):
+		if Input.is_action_pressed(input_map[player_id]["move_back"]):
 			velocity.z -= 1
-		if Input.is_action_pressed("move_left"):
+		if Input.is_action_pressed(input_map[player_id]["move_left"]):
 			velocity.x += 1
-		if Input.is_action_pressed("move_right"):
+		if Input.is_action_pressed(input_map[player_id]["move_right"]):
 			velocity.x -= 1
 
-		if Input.is_action_just_pressed("sprint") and not is_dodging:
+		if Input.is_action_just_pressed(input_map[player_id]["sprint"]) and not is_dodging:
 			is_dodging = true
 			dodge_timer = dodge_duration
 			velocity *= dodge_speed
@@ -253,7 +286,7 @@ func handle_camera_swivel(delta):
 	
 #~~~~~~~~~~~~~~ Combat Functions ~~~~~~~~~~~~~
 func check_for_dodgeball_pickup():
-	if picked_dodgeball == null and Input.is_action_just_pressed("secondary_action"):
+	if picked_dodgeball == null and Input.is_action_just_pressed(input_map[player_id]["secondary_action"]):
 		var viewport_center = get_viewport().get_size() / 2
 		Input.warp_mouse(viewport_center)
 		var space_state = get_world_3d().direct_space_state
@@ -277,7 +310,7 @@ func check_for_dodgeball_pickup():
 # Handle dodgeball throw mechanics
 func handle_dodgeball_throw(delta):
 
-	if has_ball and Input.is_action_pressed("primary_action"):
+	if has_ball and Input.is_action_pressed(input_map[player_id]["primary_action"]):
 		#print("throw loop")
 		# Gradually pull the dodgeball back
 		if not is_throwing:
@@ -320,7 +353,7 @@ func handle_dodgeball_throw(delta):
 			picked_dodgeball.global_transform = offset_transform
 			#DebugDraw3D.draw_line(picked_dodgeball.global_transform.origin, picked_dodgeball.global_transform.origin + aim_direction * 1000, Color.RED)
 			
-	elif has_ball and Input.is_action_just_released("primary_action"):	
+	elif has_ball and Input.is_action_just_released(input_map[player_id]["primary_action"]):	
 		if aim_direction:
 			DebugDraw3D.draw_line(picked_dodgeball.global_transform.origin, picked_dodgeball.global_transform.origin + aim_direction * 1000, Color.GREEN)
 			#var throw_direction = (intersection_point.position - picked_dodgeball.global_transform.origin).normalized()

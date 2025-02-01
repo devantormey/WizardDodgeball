@@ -1,4 +1,5 @@
 extends Node3D
+var player_id: int
 
 @export var target_node: Node3D# target position (to follow the character)
 
