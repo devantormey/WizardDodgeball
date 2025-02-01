@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://bt1w7hf4yyyv2"]
+
+[ext_resource type="Texture2D" uid="uid://2ifkb8tw3wmi" path="res://map/LandscapeTexture.png" id="1_wpm28"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_u1do8"]
+lightmap_size_hint = Vector2i(13, 19)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_by3lo"]
+albedo_texture = ExtResource("1_wpm28")
+uv1_scale = Vector3(100, 100, 100)
+texture_filter = 4
+grow = true
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_phbjd"]
+
+[node name="Ground" type="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1302)
+
+[node name="Floor" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1969.62, 0, 347.297, 0, 2, 0, -347.297, 0, -1969.62, 0, -0.02201, -27.5381)
+mesh = SubResource("BoxMesh_u1do8")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_by3lo")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(2000, 0, 0, 0, 2, 0, 0, 0, 2000, 0, 0, 7)
+shape = SubResource("BoxShape3D_phbjd")

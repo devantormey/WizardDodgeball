@@ -1,0 +1,18 @@
+[gd_resource type="VisualShader" load_steps=3 format=3 uid="uid://dygs13mip7lvk"]
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_0i6ud"]
+
+[sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_u1f86"]
+parameter_name = "FacesTexture"
+
+[resource]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx;
+
+
+
+"
+nodes/fragment/2/node = SubResource("VisualShaderNodeTexture_0i6ud")
+nodes/fragment/2/position = Vector2(0, 180)
+nodes/fragment/3/node = SubResource("VisualShaderNodeTexture2DParameter_u1f86")
+nodes/fragment/3/position = Vector2(-500, 240)
