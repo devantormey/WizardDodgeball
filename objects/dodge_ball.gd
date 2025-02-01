@@ -8,29 +8,12 @@ signal hit_player(player, dodgeball)
 
 
 func _ready():
-# Enable contact monitoring to detect collisions
+	# Enable contact monitoring to detect collisions
 	contact_monitor = true
 	#contacts_reported = 10  # Adjust as necessary
 
-# Connect collision signals
-	self.body_entered.connect(on_body_entered)
-
-func _physics_process(delta):
-	# Check for collisions and emit signal
-	if contact_monitor:
-		var num_contacts = get_contact_count()
-		var colliding_bodies = get_colliding_bodies()
-		for body in colliding_bodies:
-			if body and (body.name == "Player" or body.name == "dummy"):
-				emit_signal("hit_player", body, self)
-				print("Hit player:", body.name)
-			
-
 # Called when a body enters the collision shape
 func on_body_entered(body):
-	if body.name == "Player" or body.name == "dummy":  # Replace with your player node names
-		#emit_signal("hit_player", body, self)
-		print("DodgeBall Script Hit player:", body.name)
 	if body and (body.name == "Ground" or body.name == "Wall"):
 		#print("hitta dah ground")
 		ball_owner = null

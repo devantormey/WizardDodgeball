@@ -354,7 +354,7 @@ func handle_dodgeball_throw(delta):
 			
 			# Here I basically pull the ball back in the opposite direction as the player is aiming, but I only really care about the z for now
 			var pullbackdirection = aim_direction
-			pullbackdirection.x = 0
+			#pullbackdirection.x = 0
 			pullbackdirection.y = 0
 			pullbackdirection = pullbackdirection.normalized()
 			
@@ -374,6 +374,7 @@ func handle_dodgeball_throw(delta):
 				force.y = 0
 			# Adjusting the force upwards based on the pull back progress (more up for harder throw)
 			force.y += 10*pull_back_progress
+			print("force: ", force)
 			picked_dodgeball.apply_central_impulse(force)
 			picked_dodgeball = null
 			has_ball = false
