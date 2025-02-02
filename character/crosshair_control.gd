@@ -1,36 +1,42 @@
 extends Control
 
-@onready var crosshair =  $CursorTextureRect # Path to the TextureRect holding the crosshair image
-@onready var top_node = $".."
+@onready var crosshair = $CursorTextureRect  # Crosshair TextureRect
+@onready var top_node = $".."  # Reference to player node
 @export var default_crosshair_size: Vector2 = Vector2(32, 32)  # Default size in pixels
 @export var crosshair_scale: float = 1.0  # Scale factor for the crosshair
-@onready var crosshair_x_offest = 12
-@onready var crosshair_y_offest = 12
+@export var player_id: int  # Player ID (1 or 2)
+@export var splitscreen: bool = false  # If true, use SubViewports
+@onready var crosshair_x_offset = 12
+@onready var crosshair_y_offset = 12
 
-# Called when the node enters the scene tree for the first time
+# Reference to the player's viewport
+var player_viewport: SubViewport
+
 func _ready():
-	pass
-	# Set the initial size of the crosshair
-	#crosshair.rect_min_size = default_crosshair_size * crosshair_scale
+	if splitscreen:
+		player_viewport = get_parent().get_viewport()
+		print("viewport: ", player_viewport)
+	update_crosshair_position()
 
-	# Ensure the system cursor is hidden
-	#Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+func update_crosshair_position():
+	var viewport_size: Vector2
 
-# Called every frame
-func _process(delta):
-	# Update the position of the crosshair to match the mouse
-	if top_node.is_throwing:
-		var mouse_pos = get_viewport().get_mouse_position()
-		mouse_pos.x -= crosshair_x_offest
-		mouse_pos.y -= crosshair_y_offest
-		crosshair.position = mouse_pos
+	if splitscreen:
+		player_viewport = get_parent().get_viewport()
+		# Use SubViewport size for splitscreen
+		viewport_size = player_viewport.size
 	else:
-		pass
-		var viewport_center = get_viewport().get_size() / 2
-		viewport_center.x -= crosshair_x_offest
-		viewport_center.y -= crosshair_y_offest
-		crosshair.position = viewport_center
-# Dynamically update the crosshair size
-#func update_crosshair_size(new_scale: float):
-	#crosshair_scale = new_scale
-	#crosshair.rect_min_size = default_crosshair_size * crosshair_scale
+		# Use full screen for single-player mode
+		viewport_size = get_viewport().get_size()
+
+	# Calculate the center of the viewport
+	var viewport_center = viewport_size / 2
+	viewport_center.x -= crosshair_x_offset
+	viewport_center.y -= crosshair_y_offset
+
+	# Set crosshair position
+	crosshair.position = viewport_center
+
+# Called every frame (adjust crosshair based on controller aim)
+func _process(delta):
+	update_crosshair_position()
