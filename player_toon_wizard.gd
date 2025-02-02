@@ -78,7 +78,7 @@ var pull_back_progress: float = 0.0  # Tracks the progress of the pull-back
 var aim_direction 
 var initial_player_position: Vector3 = Vector3.ZERO
 
-
+@onready var shape_cast = $AimMarker/ShapeCast3D  # Reference the ShapeCast3D node
 @onready var is_throwing: bool = false
 #variable to track picked dodgeball
 @onready var picked_dodgeball: RigidBody3D = null
@@ -211,7 +211,9 @@ func _physics_process(delta):
 func _process(_delta):
 	
 	handle_input(_delta)
-	
+	shape_cast.global_transform = camera_pivot.global_transform
+	shape_cast.rotation.y += deg_to_rad(180)
+	shape_cast.rotation.x = -shape_cast.rotation.x
 	if !ragdoll_mode:
 		move_character(_delta)		
 		handle_camera_swivel(_delta)
@@ -298,29 +300,55 @@ func handle_camera_swivel(delta):
 
 	
 #~~~~~~~~~~~~~~ Combat Functions ~~~~~~~~~~~~~
+
+
+
 func check_for_dodgeball_pickup():
 	if picked_dodgeball == null and Input.is_action_just_pressed(input_map[player_id]["secondary_action"]):
-		#This is a bunch of raycast code I stole
-		var viewport_center = get_viewport().get_size() / 2
-		#Input.warp_mouse(viewport_center)$CursorControl/CursorTextureRect
-		Input.warp_mouse($CursorControl/CursorTextureRect.position)
-		var space_state = get_world_3d().direct_space_state
-		#var mousepos = get_viewport().get_mouse_position()
-		var origin = camera_pivot.camera.project_ray_origin($CursorControl/CursorTextureRect.position)
-		var end = origin + camera_pivot.camera.project_ray_normal($CursorControl/CursorTextureRect.position) * 200
-		var query = PhysicsRayQueryParameters3D.create(origin, end)
-		query.collide_with_areas = true
-		
-		# Basically if you cast a ray until it intersect something and if that something is a ball pick it up
-		var result = space_state.intersect_ray(query)
-		print(result)
-		if result.has("collider") and result["collider"] is RigidBody3D and result["collider"].name.begins_with("DodgeBall"):
-			# Check if the thing the ray hit is a ball and move it to the marker
-			picked_dodgeball = result["collider"] as RigidBody3D
-			picked_dodgeball.global_transform = dodgeball_marker.global_transform
-			has_ball = true
-			pull_back_progress = 0.0
-			picked_dodgeball.ball_owner = player_id
+		# Align the ShapeCast3D with the camera direction
+		shape_cast.global_transform = camera_pivot.global_transform
+		shape_cast.rotation.y += deg_to_rad(180)
+		shape_cast.rotation.x = -shape_cast.rotation.x
+		# Move the cast forward in the direction the camera is looking
+		#shape_cast.target_position = -shape_cast.transform.basis.z * 20.0  # Adjust range as needed
+
+		# Force an update so the new direction takes effect
+		shape_cast.force_shapecast_update()
+
+		for i in range(shape_cast.get_collision_count()):
+			var collider = shape_cast.get_collider(i)
+
+			if collider is RigidBody3D and collider.name.begins_with("DodgeBall"):
+				picked_dodgeball = collider
+				picked_dodgeball.global_transform = dodgeball_marker.global_transform
+				has_ball = true
+				pull_back_progress = 0.0
+				picked_dodgeball.ball_owner = player_id
+				break  # Stop after picking up the first dodgeball
+
+#func check_for_dodgeball_pickup():
+	#if picked_dodgeball == null and Input.is_action_just_pressed(input_map[player_id]["secondary_action"]):
+		##This is a bunch of raycast code I stole
+		#var viewport_center = get_viewport().get_size() / 2
+		##Input.warp_mouse(viewport_center)$CursorControl/CursorTextureRect
+		#Input.warp_mouse($CursorControl/CursorTextureRect.position)
+		#var space_state = get_world_3d().direct_space_state
+		##var mousepos = get_viewport().get_mouse_position()
+		#var origin = camera_pivot.camera.project_ray_origin($CursorControl/CursorTextureRect.position)
+		#var end = origin + camera_pivot.camera.project_ray_normal($CursorControl/CursorTextureRect.position) * 200
+		#var query = PhysicsRayQueryParameters3D.create(origin, end)
+		#query.collide_with_areas = true
+		#
+		## Basically if you cast a ray until it intersect something and if that something is a ball pick it up
+		#var result = space_state.intersect_ray(query)
+		#print(result)
+		#if result.has("collider") and result["collider"] is RigidBody3D and result["collider"].name.begins_with("DodgeBall"):
+			## Check if the thing the ray hit is a ball and move it to the marker
+			#picked_dodgeball = result["collider"] as RigidBody3D
+			#picked_dodgeball.global_transform = dodgeball_marker.global_transform
+			#has_ball = true
+			#pull_back_progress = 0.0
+			#picked_dodgeball.ball_owner = player_id
 
 
 # Handle dodgeball throw mechanics
@@ -392,7 +420,11 @@ func handle_dodgeball_throw(delta):
 			# Adjusting the force upwards based on the pull back progress (more up for harder throw)
 			force.y += 10*pull_back_progress
 			print("force: ", force)
+			
+			picked_dodgeball.global_transform.origin += aim_direction * 0.5  # Move ball forward slightly
 			picked_dodgeball.apply_central_impulse(force)
+
+			#picked_dodgeball.apply_central_impulse(force)
 			picked_dodgeball = null
 			has_ball = false
 			pull_back_progress = 0.0
@@ -426,12 +458,16 @@ func set_bone_damping():
 		bone.linear_damp = bone_linear_damping
 
 func reset_bone_positions():
-	for i in range(physics_bones.size()):
-		var active_bone = physics_bones[i]
-		var static_bone = static_skel.get_child(i)
+	var k = 0
+	while k < 2:
+		physical_skel.global_transform = static_skel.global_transform
+		for i in range(physics_bones.size()):
+			var active_bone = physics_bones[i]
+			var static_bone = static_skel.get_child(i)
 
-		if active_bone is PhysicalBone3D and static_bone is PhysicalBone3D:
-			active_bone.global_position = static_bone.global_position
+			if active_bone is PhysicalBone3D and static_bone is PhysicalBone3D:
+				active_bone.global_transform = static_bone.global_transform
+		k +=1
 
 #~~~~~~~~~~~~~ Signal Connection Functions ~~~~~~~~~~~~~~~~
 

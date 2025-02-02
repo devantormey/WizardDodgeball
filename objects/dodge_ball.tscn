@@ -45,7 +45,7 @@ albedo_texture = ExtResource("1_yo101")
 uv1_scale = Vector3(2, 2, 2)
 
 [node name="DodgeBall" type="RigidBody3D"]
-collision_layer = 771
+collision_layer = 1795
 collision_mask = 771
 center_of_mass_mode = 1
 contact_monitor = true

@@ -10,7 +10,6 @@ signal hit_player(player, dodgeball)
 func _ready():
 	# Enable contact monitoring to detect collisions
 	contact_monitor = true
-	#contacts_reported = 10  # Adjust as necessary
 
 # Called when a body enters the collision shape
 func on_body_entered(body):
