@@ -31,7 +31,7 @@ func _ready():
 	mouse_lock = true
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	
-func _physics_process(delta):
+func _physics_process(_delta):
 	# Prevent camera from clipping into character
 	for child in physical_skel.get_children():
 		if child is PhysicalBone3D:

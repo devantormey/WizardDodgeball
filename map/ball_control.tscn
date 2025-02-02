@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://5tnlttol0cxk"]
+
+[ext_resource type="Script" path="res://map/ball_control.gd" id="1_rr3t7"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gce0v"]
+size = Vector3(80, 20, 100)
+
+[node name="BallControl" type="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.5489, 10.3526, -4.63886)
+script = ExtResource("1_rr3t7")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.6595, 0, 0)
+shape = SubResource("BoxShape3D_gce0v")
+
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]

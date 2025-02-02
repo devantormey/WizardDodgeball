@@ -169,19 +169,19 @@ visible = false
 collision_layer = 259
 collision_mask = 259
 
-[node name="DodgeBall" parent="." groups=["Dodgeballs"] instance=ExtResource("2_vm4ah")]
+[node name="DodgeBall" parent="." instance=ExtResource("2_vm4ah")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.21748, 2.03972, 3.46289)
 
-[node name="DodgeBall2" parent="." groups=["Dodgeballs"] instance=ExtResource("2_vm4ah")]
+[node name="DodgeBall2" parent="." instance=ExtResource("2_vm4ah")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.24756, 2.03972, 3.46289)
 
-[node name="DodgeBall3" parent="." groups=["Dodgeballs"] instance=ExtResource("2_vm4ah")]
+[node name="DodgeBall3" parent="." instance=ExtResource("2_vm4ah")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.5777, 2.03972, 3.46289)
 
-[node name="DodgeBall4" parent="." groups=["Dodgeballs"] instance=ExtResource("2_vm4ah")]
+[node name="DodgeBall4" parent="." instance=ExtResource("2_vm4ah")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.9909, 2.03972, 3.46289)
 
-[node name="DodgeBall5" parent="." groups=["Dodgeballs"] instance=ExtResource("2_vm4ah")]
+[node name="DodgeBall5" parent="." instance=ExtResource("2_vm4ah")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45.4455, 2.03972, 3.46289)
 
 [node name="wall1" type="StaticBody3D" parent="."]
