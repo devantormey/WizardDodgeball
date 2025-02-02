@@ -1,10 +1,11 @@
-[gd_scene load_steps=22 format=4 uid="uid://b3d6mr624uc82"]
+[gd_scene load_steps=23 format=4 uid="uid://b3d6mr624uc82"]
 
 [ext_resource type="PackedScene" uid="uid://bt1w7hf4yyyv2" path="res://map/ground.tscn" id="1_atrde"]
 [ext_resource type="PackedScene" uid="uid://bll34nka4arxh" path="res://objects/dodge_ball.tscn" id="2_q81di"]
 [ext_resource type="Texture2D" uid="uid://chgf4bdh8qvpr" path="res://map/map1_ground.png" id="3_83p3d"]
 [ext_resource type="Texture2D" uid="uid://ptlb3xuuksnd" path="res://map/stylized_nature_pack/Textures/Grass.png" id="4_q4yxl"]
 [ext_resource type="PackedScene" uid="uid://c2vsxhwp2hrwp" path="res://Player_toonWizard.tscn" id="5_12mh2"]
+[ext_resource type="PackedScene" uid="uid://b62vu5kgan3t1" path="res://objects/fire_dodge_ball.tscn" id="6_uaqbl"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vluc2"]
 size = Vector3(55, 15, 2)
@@ -166,28 +167,26 @@ shadow_enabled = true
 [node name="Ground" parent="." instance=ExtResource("1_atrde")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.599704, 0, 1.31527)
 visible = false
-collision_layer = 259
-collision_mask = 259
+collision_layer = 257
+collision_mask = 257
 
-[node name="DodgeBall" parent="." groups=["Dodgeballs"] instance=ExtResource("2_q81di")]
+[node name="DodgeBall" parent="." instance=ExtResource("2_q81di")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.21748, 2.03972, 3.46289)
 
-[node name="DodgeBall2" parent="." groups=["Dodgeballs"] instance=ExtResource("2_q81di")]
+[node name="DodgeBall2" parent="." instance=ExtResource("2_q81di")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.24756, 2.03972, 3.46289)
 
-[node name="DodgeBall3" parent="." groups=["Dodgeballs"] instance=ExtResource("2_q81di")]
+[node name="DodgeBall3" parent="." instance=ExtResource("2_q81di")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.5777, 2.03972, 3.46289)
 
-[node name="DodgeBall4" parent="." groups=["Dodgeballs"] instance=ExtResource("2_q81di")]
+[node name="DodgeBall4" parent="." instance=ExtResource("2_q81di")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.9909, 2.03972, 3.46289)
 
-[node name="DodgeBall5" parent="." groups=["Dodgeballs"] instance=ExtResource("2_q81di")]
+[node name="DodgeBall5" parent="." instance=ExtResource("2_q81di")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45.4455, 2.03972, 3.46289)
 
 [node name="wall1" type="StaticBody3D" parent="."]
 transform = Transform3D(1.46383, 0, 0, 0, 2.12347, 0, 0, 0, 1, 20.9188, 8.02296, -47.4415)
-collision_layer = 3
-collision_mask = 3
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="wall1"]
 transform = Transform3D(1, 0, 0, 0, 2.4102, 0, 0, 0, 3.42288, 0, 0, 0)
@@ -197,10 +196,23 @@ shape = SubResource("BoxShape3D_vluc2")
 transform = Transform3D(3.52961, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("BoxMesh_wj7kp")
 
+[node name="InvisibleCenterWall" type="StaticBody3D" parent="."]
+transform = Transform3D(2.40277, 0, 0, 0, 2.12347, 0, 0, 0, 1, 18.0188, 8.02296, -4.76465)
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InvisibleCenterWall"]
+transform = Transform3D(1, 0, 0, 0, 2.4102, 0, 0, 0, 3.42288, 0, 0, 0)
+shape = SubResource("BoxShape3D_vluc2")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="InvisibleCenterWall"]
+transform = Transform3D(3.52961, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+visible = false
+layers = 2
+mesh = SubResource("BoxMesh_wj7kp")
+
 [node name="wall2" type="StaticBody3D" parent="."]
 transform = Transform3D(1.46383, 0, 0, 0, 2.12347, 0, 0, 0, 1, 20.9188, 8.02296, 41.9652)
-collision_layer = 3
-collision_mask = 3
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="wall2"]
 transform = Transform3D(1, 0, 0, 0, 2.2159, 0, 0, 0, 2.87364, 0, 0, 0)
@@ -278,3 +290,6 @@ transform = Transform3D(0.999967, 0, 0.00813332, 0, 1, 0, -0.00813332, 0, 0.9999
 player_id = 2
 camera_toggle = true
 splitscreen = true
+
+[node name="FireDodgeBall" parent="." instance=ExtResource("6_uaqbl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.95309, 1, 20.3967)

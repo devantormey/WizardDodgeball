@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cejc04qptt3v6"
-path.s3tc="res://.godot/imported/kickborl.png-a03a007098a3882e32191d5be6a2ffc7.s3tc.ctex"
+uid="uid://di2dse1uccnpt"
+path.s3tc="res://.godot/imported/ember_spark.png-266a39b6a00356858635bc977d90c36f.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://objects/kickborl.png"
-dest_files=["res://.godot/imported/kickborl.png-a03a007098a3882e32191d5be6a2ffc7.s3tc.ctex"]
+source_file="res://effects/ember_spark.png"
+dest_files=["res://.godot/imported/ember_spark.png-266a39b6a00356858635bc977d90c36f.s3tc.ctex"]
 
 [params]
 

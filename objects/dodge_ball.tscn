@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=4 uid="uid://bll34nka4arxh"]
 
 [ext_resource type="Script" path="res://objects/dodge_ball.gd" id="1_7inol"]
-[ext_resource type="Texture2D" uid="uid://cejc04qptt3v6" path="res://objects/kickborl.png" id="1_yo101"]
+[ext_resource type="Texture2D" uid="uid://cejc04qptt3v6" path="res://kickborl.png" id="1_yo101"]
 [ext_resource type="PackedScene" uid="uid://b7qpqgjfvdyff" path="res://effects/groundHit_effect.tscn" id="2_7cnsn"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_wwmv8"]
@@ -44,9 +44,9 @@ shadow_mesh = SubResource("ArrayMesh_2ooy7")
 albedo_texture = ExtResource("1_yo101")
 uv1_scale = Vector3(2, 2, 2)
 
-[node name="DodgeBall" type="RigidBody3D"]
-collision_layer = 1795
-collision_mask = 771
+[node name="DodgeBall" type="RigidBody3D" groups=["Dodgeballs"]]
+collision_layer = 1793
+collision_mask = 769
 center_of_mass_mode = 1
 contact_monitor = true
 max_contacts_reported = 2
