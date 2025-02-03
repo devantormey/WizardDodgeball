@@ -1,10 +1,11 @@
-[gd_scene load_steps=25 format=4 uid="uid://b3d6mr624uc82"]
+[gd_scene load_steps=26 format=4 uid="uid://b3d6mr624uc82"]
 
 [ext_resource type="PackedScene" uid="uid://bt1w7hf4yyyv2" path="res://map/ground.tscn" id="1_atrde"]
 [ext_resource type="PackedScene" uid="uid://bll34nka4arxh" path="res://objects/dodge_ball.tscn" id="2_q81di"]
 [ext_resource type="Texture2D" uid="uid://chgf4bdh8qvpr" path="res://map/map1_ground.png" id="3_83p3d"]
 [ext_resource type="Texture2D" uid="uid://ptlb3xuuksnd" path="res://map/stylized_nature_pack/Textures/Grass.png" id="4_q4yxl"]
 [ext_resource type="PackedScene" uid="uid://c2vsxhwp2hrwp" path="res://Player_toonWizard.tscn" id="5_12mh2"]
+[ext_resource type="PackedScene" uid="uid://depna016h3tux" path="res://objects/blink_hat.tscn" id="6_i8yq4"]
 [ext_resource type="PackedScene" uid="uid://b62vu5kgan3t1" path="res://objects/fire_dodge_ball.tscn" id="6_uaqbl"]
 [ext_resource type="Script" path="res://map/ball_control.gd" id="7_kpgwj"]
 
@@ -286,6 +287,7 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 12.529
 player_id = 1
 camera_toggle = true
 splitscreen = true
+hat = ExtResource("6_i8yq4")
 
 [node name="ViewportContainer2" type="SubViewportContainer" parent="GridContainer"]
 layout_mode = 2

@@ -353,7 +353,6 @@ bones/14/rotation = Quaternion(0, 0, 0, 1)
 bones/14/scale = Vector3(1, 1, 1)
 
 [node name="BodyMesh" type="MeshInstance3D" parent="ActiveArmature/Armature/Skeleton3D"]
-visible = false
 mesh = SubResource("ArrayMesh_kr81u")
 skin = SubResource("Skin_oc7b7")
 
@@ -709,8 +708,8 @@ shape = SubResource("CapsuleShape3D_i3utu")
 transform = Transform3D(5.37412e-10, -0.00622278, -0.000678848, 0.0062597, 6.61483e-10, -1.10809e-09, 1.17329e-09, -0.000678848, 0.00622278, -0.00337202, 5.82077e-10, -0.00325376)
 collision_mask = 3
 joint_type = 2
-joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.32475e-09, 1.29186e-06, 0.522878)
-body_offset = Transform3D(0.0062597, 3.83027e-15, -6.10623e-16, -5.27356e-16, 1.45519e-09, -0.0062597, -3.94129e-15, 0.0062597, 1.45519e-09, -1.45519e-11, 0.00327306, -8.84756e-09)
+joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.32475e-09, 1.47784e-06, 0.522878)
+body_offset = Transform3D(0.0062597, 3.83027e-15, -6.10623e-16, -5.27356e-16, 1.45519e-09, -0.0062597, -3.94129e-15, 0.0062597, 1.45519e-09, -1.45519e-11, 0.00327306, -1.00117e-08)
 bone_name = "leg.r"
 joint_constraints/swing_span = 30.0
 joint_constraints/twist_span = 180.0

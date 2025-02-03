@@ -110,6 +110,10 @@ var vertical_rotation: float = 0.0 # Track vertical rotation to clamp within lim
 var current_expression = "forward"
 @onready var last_expression = "forward"
 
+# Clothing and Items
+@export var hat: PackedScene
+var equipped_hat: Node3D  # Store the instantiated hat
+
 # Player ID Input Map
 var input_map = {
 	1: {
@@ -146,6 +150,7 @@ var input_map = {
 
 #READY FUNCTION
 func _ready():
+	
 	#set the camera up
 	camera_pivot.player_id = player_id
 	camera_pivot.camera.current = camera_toggle
@@ -171,10 +176,23 @@ func _ready():
 	blink_timer.wait_time = randf_range(3.0, 6.0)
 	# Connect timer signals
 	blink_timer.start()
-
+	
+	#clothes stuff
+	if hat != null:
+		equipped_hat = hat.instantiate()
+		head_bone.add_child(equipped_hat)
+		# Reset the transform to ensure proper positioning
+		equipped_hat.transform = Transform3D()
+		# Apply a rotation offset to correct orientation (adjust if needed)
+		equipped_hat.rotate_object_local(Vector3.RIGHT, deg_to_rad(-90)) 
 #PHYSICS PROCESS (FASTEST UPDATE)
 func _physics_process(delta):
-	
+	if hat != null:
+		# Reset the transform to ensure proper positioning
+		equipped_hat.transform = Transform3D()
+		# Apply a rotation offset to correct orientation (adjust if needed)
+		equipped_hat.rotate_object_local(Vector3.RIGHT, deg_to_rad(-90)) 
+		
 	if not ragdoll_mode:# if not in ragdoll mode
 		# rotate the physical bones toward the animated bones rotations using hookes law
 		for b:PhysicalBone3D in physics_bones:
@@ -216,7 +234,7 @@ func _process(_delta):
 	shape_cast.rotation.x = -shape_cast.rotation.x
 	if !ragdoll_mode:
 		move_character(_delta)		
-		handle_camera_swivel(_delta)
+		#handle_camera_swivel(_delta)
 		check_for_dodgeball_pickup()
 		
 		if picked_dodgeball != null and !is_throwing:
@@ -289,22 +307,17 @@ func set_expression(expression: String):
 		face_material.set_shader_parameter("expression_index", expression_vec)
 		current_expression = expression
 		
-func handle_camera_swivel(delta):
-	var mouse_delta = Input.get_last_mouse_velocity()
+#func handle_camera_swivel(delta):
+	#var mouse_delta = Input.get_last_mouse_velocity()
+#
+	## Rotate the top node based on horizontal mouse movement
+	#self.rotate_y(deg_to_rad(-mouse_delta.x * rotation_speed * delta * 0.01))
+#
+	## Adjust vertical rotation with clamping
+	#vertical_rotation -= mouse_delta.y * vertical_rotation_speed * delta * 0.01
+	#vertical_rotation = clamp(vertical_rotation, -vertical_rotation_limit, vertical_rotation_limit)
 
-	# Rotate the top node based on horizontal mouse movement
-	self.rotate_y(deg_to_rad(-mouse_delta.x * rotation_speed * delta * 0.01))
-
-	# Adjust vertical rotation with clamping
-	vertical_rotation -= mouse_delta.y * vertical_rotation_speed * delta * 0.01
-	vertical_rotation = clamp(vertical_rotation, -vertical_rotation_limit, vertical_rotation_limit)
-
-
-	
 #~~~~~~~~~~~~~~ Combat Functions ~~~~~~~~~~~~~
-
-
-
 func check_for_dodgeball_pickup():
 	if picked_dodgeball == null and Input.is_action_just_pressed(input_map[player_id]["secondary_action"]):
 		# Align the ShapeCast3D with the camera direction
@@ -327,31 +340,6 @@ func check_for_dodgeball_pickup():
 				pull_back_progress = 0.0
 				picked_dodgeball.ball_owner = player_id
 				break  # Stop after picking up the first dodgeball
-
-#func check_for_dodgeball_pickup():
-	#if picked_dodgeball == null and Input.is_action_just_pressed(input_map[player_id]["secondary_action"]):
-		##This is a bunch of raycast code I stole
-		#var viewport_center = get_viewport().get_size() / 2
-		##Input.warp_mouse(viewport_center)$CursorControl/CursorTextureRect
-		#Input.warp_mouse($CursorControl/CursorTextureRect.position)
-		#var space_state = get_world_3d().direct_space_state
-		##var mousepos = get_viewport().get_mouse_position()
-		#var origin = camera_pivot.camera.project_ray_origin($CursorControl/CursorTextureRect.position)
-		#var end = origin + camera_pivot.camera.project_ray_normal($CursorControl/CursorTextureRect.position) * 200
-		#var query = PhysicsRayQueryParameters3D.create(origin, end)
-		#query.collide_with_areas = true
-		#
-		## Basically if you cast a ray until it intersect something and if that something is a ball pick it up
-		#var result = space_state.intersect_ray(query)
-		#print(result)
-		#if result.has("collider") and result["collider"] is RigidBody3D and result["collider"].name.begins_with("DodgeBall"):
-			## Check if the thing the ray hit is a ball and move it to the marker
-			#picked_dodgeball = result["collider"] as RigidBody3D
-			#picked_dodgeball.global_transform = dodgeball_marker.global_transform
-			#has_ball = true
-			#pull_back_progress = 0.0
-			#picked_dodgeball.ball_owner = player_id
-
 
 # Handle dodgeball throw mechanics
 func handle_dodgeball_throw(delta):
@@ -420,7 +408,7 @@ func handle_dodgeball_throw(delta):
 			if force.y < 0:
 				force.y = 0
 			# Adjusting the force upwards based on the pull back progress (more up for harder throw)
-			force.y += 10*pull_back_progress
+			force.y += 7*pull_back_progress
 			print("force: ", force)
 			
 			picked_dodgeball.global_transform.origin += aim_direction * 0.5  # Move ball forward slightly
@@ -467,9 +455,9 @@ func reset_bone_positions():
 		for i in range(physics_bones.size()):
 			var active_bone = physics_bones[i]
 			var static_bone_position = static_skel.get_bone_pose_position(i)
-			print("active Bone position: ", active_bone.position)
-			print("static Bone position: ", static_bone_position)
-			print("static bone pos adjusted: ", static_bone_position*static_skel.global_basis)
+			#print("active Bone position: ", active_bone.position)
+			#print("static Bone position: ", static_bone_position)
+			#print("static bone pos adjusted: ", static_bone_position*static_skel.global_basis)
 			active_bone.global_position = static_bone_position
 		k +=1
 
