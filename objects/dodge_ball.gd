@@ -16,7 +16,7 @@ func _ready():
 
 # Called when a body enters the collision shape
 func on_body_entered(body):
-	if body and (body.name == "Ground" or body.name == "Wall"):
+	if body and (body.name.begins_with("Ground") or body.name.begins_with("Wall") ):
 		#print("hitta dah ground")
 		ball_owner = null
 		if self.linear_velocity.length() > 1.0:
