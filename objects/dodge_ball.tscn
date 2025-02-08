@@ -47,6 +47,7 @@ uv1_scale = Vector3(2, 2, 2)
 [node name="DodgeBall" type="RigidBody3D" groups=["Dodgeballs"]]
 collision_layer = 1793
 collision_mask = 769
+gravity_scale = 0.5
 center_of_mass_mode = 1
 contact_monitor = true
 max_contacts_reported = 2

@@ -3,7 +3,7 @@ extends Node3D
 @onready var firemesh = $DodgeBall/FireballMesh
 @onready var ember_emitter = $DodgeBall/EmberEmitter
 @onready var is_being_thrown = false
-@onready var THROW_FORCE = 80.0
+@onready var THROW_FORCE = 60.0
 var start_position
 var out_of_bounds = false
 # Called when the node enters the scene tree for the first time.

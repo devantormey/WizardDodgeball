@@ -1,12 +1,23 @@
-[gd_scene load_steps=18 format=4 uid="uid://depna016h3tux"]
+[gd_scene load_steps=21 format=4 uid="uid://depna016h3tux"]
 
 [ext_resource type="Texture2D" uid="uid://cwmfbl6t1um74" path="res://objects/blinkHat_HAT.png" id="1_m7156"]
+[ext_resource type="Shader" path="res://objects/purple_hat.gdshader" id="2_btuvt"]
+[ext_resource type="Material" uid="uid://bwjsbxv7cn8mt" path="res://objects/bottleShader.tres" id="2_ycbun"]
 [ext_resource type="Texture2D" uid="uid://b8g0iq3ghcarr" path="res://objects/blinkHat_StrapTexture.png" id="2_yft3k"]
 [ext_resource type="Texture2D" uid="uid://bwm345bhu868i" path="res://objects/blinkHat_lilstrapTexture.png" id="3_k41q0"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rjjfg"]
+render_priority = 0
+shader = ExtResource("2_btuvt")
+shader_parameter/color = Color(0.597176, 0.597176, 0.597176, 1)
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ywlp0"]
 resource_name = "HatMaterial"
+next_pass = SubResource("ShaderMaterial_rjjfg")
+blend_mode = 3
 cull_mode = 2
+diffuse_mode = 3
+specular_mode = 1
 albedo_color = Color(0, 0, 0, 1)
 metallic = 1.0
 emission_enabled = true
@@ -211,11 +222,13 @@ skeleton = NodePath("")
 transform = Transform3D(0.203457, 0, 0, 0, 0.22717, 0, 0, 0, 0.243415, 1.25009, 1.4116, -0.281671)
 mesh = SubResource("ArrayMesh_03cac")
 skeleton = NodePath("")
+surface_material_override/0 = ExtResource("2_ycbun")
 
 [node name="lilBottle" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.132522, 0.020281, 0.0277077, -0.0124351, 0.160007, -0.0310887, -0.0253374, 0.0275475, 0.160177, 0.933192, 1.4116, -0.642625)
 mesh = SubResource("ArrayMesh_nk247")
 skeleton = NodePath("")
+surface_material_override/0 = ExtResource("2_ycbun")
 
 [node name="strap1" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.0184364, 0.0513645, 0.0107642, -0.00626466, 0.142125, -0.00961526, -0.00424245, 0.013344, 0.0609765, 0.796201, 1.56229, -0.25755)
