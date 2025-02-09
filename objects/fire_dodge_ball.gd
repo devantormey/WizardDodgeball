@@ -16,7 +16,7 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	out_of_bounds = dodgeball.out_of_bounds
-	if dodgeball.linear_velocity.length() > 80:
+	if dodgeball.linear_velocity.length() > 60:
 		ember_emitter.emitting = false
 		firemesh.visible = true
 	else:

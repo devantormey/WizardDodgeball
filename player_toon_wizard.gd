@@ -232,7 +232,7 @@ func _physics_process(delta):
 		pin_bones_to_marker(right_leg_pin,right_leg_bone, pin_spring_stiffness/20, pin_spring_damping/10,delta)
 		pin_bones_to_marker(left_arm_pin,left_arm_bone, pin_spring_stiffness/40, pin_spring_damping/10, delta)
 		if is_throwing:
-			pin_bones_to_marker(picked_dodgeball,right_arm_bone, pin_spring_stiffness/60, pin_spring_damping/40,delta)
+			pin_bones_to_marker(picked_dodgeball,right_arm_bone, pin_spring_stiffness/90, pin_spring_damping/40,delta)
 		else:
 			pin_bones_to_marker(right_arm_pin,right_arm_bone, pin_spring_stiffness/40, pin_spring_damping/10,delta)
 		
@@ -478,8 +478,8 @@ func set_bone_damping():
 
 func reset_bone_positions():
 	resetting_ragdoll = true
-	print("starting Reset")
-	var k = 0
+	#print("starting Reset")
+	#var k = 0
 	#while k < 40:
 	physical_skel.global_transform = static_skel.global_transform
 	#static_skel.global_transform = $".".global_transform
@@ -492,7 +492,7 @@ func reset_bone_positions():
 			##print("static bone pos adjusted: ", static_bone_position*static_skel.global_basis)
 			#active_bone.global_transform = static_bone_position
 		#k +=1
-	print("reset_complete")
+	#print("reset_complete")
 	resetting_ragdoll = false
 #~~~~~~~~~~~~~ Signal Connection Functions ~~~~~~~~~~~~~~~~
 
@@ -514,7 +514,7 @@ func _on_hit_box_area_body_entered(body):
 		if body.ball_owner != player_id and body.ball_owner != null:
 			# Enable ragdoll mode
 			ragdoll_mode = true  
-
+			$RespawnTimer.start()
 			# Calculate the impact direction
 			var impact_direction = (body.global_position - body_bone.global_position).normalized()
 
@@ -527,6 +527,13 @@ func _on_hit_box_area_body_entered(body):
 			body.ball_owner = null
 			# Drop ball if you got it (the if is handled in the function)
 			drop_dodgeball()
+
+
+func _on_respawn_timer_timeout():
+	reset_bone_positions()
+	ragdoll_mode = false
+	set_expression("forward")
+
 
 #~~~~~~~~~~~~~ Extra Goodies ~~~~~~~~~~~~~~~~
 
