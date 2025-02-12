@@ -112,7 +112,6 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-788.458, -26.0925)
 nodes/vertex/2/node = SubResource("VisualShaderNodeBillboard_eeqpy")
 nodes/vertex/2/position = Vector2(-320, 180)
 nodes/vertex/connections = PackedInt32Array(2, 0, 0, 10)

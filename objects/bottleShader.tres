@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://bwjsbxv7cn8mt"]
+
+[ext_resource type="Shader" path="res://objects/toon_glass.gdshader" id="1_5dqtw"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_5dqtw")
+shader_parameter/color = Color(0, 0.467971, 0.699144, 1)

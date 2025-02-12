@@ -1,4 +1,4 @@
-extends Node3D
+extends RigidBody3D
 
 #Player ID:
 @export var player_id: int
@@ -15,6 +15,7 @@ extends Node3D
 
 #~~~~ Ragdoll Mode (for when you get hit)
 @onready var ragdoll_mode = false
+@onready var resetting_ragdoll = false
 
 #~~~~ Spring constants
 @export var angular_spring_stiffness: float = 4500.0
@@ -75,10 +76,18 @@ const THROW_FORCE = 40.0
 const SLIDE_BACK_SPEED = 2.4  # Speed of the ball sliding back
 const SLIDE_BACK_DIST = 2
 var pull_back_progress: float = 0.0  # Tracks the progress of the pull-back
-var aim_direction 
-var initial_player_position: Vector3 = Vector3.ZERO
 
-@onready var shape_cast = $AimMarker/ShapeCast3D  # Reference the ShapeCast3D node
+var aim_direction
+var initial_player_position: Vector3 = Vector3.ZERO
+var crosshair_offset = Vector2(-16,-15)
+var aimPoint = null
+var aimObj = null
+
+# This is the pickup cast I named it dumb
+@onready var shape_cast = $AimMarker/PickupShapeCast  # Reference the ShapeCast3D node
+# ShapeCast for Aiming
+@onready var aim_cast = $AimMarker/AimShapeCast
+
 @onready var is_throwing: bool = false
 #variable to track picked dodgeball
 @onready var picked_dodgeball: RigidBody3D = null
@@ -108,6 +117,10 @@ var vertical_rotation: float = 0.0 # Track vertical rotation to clamp within lim
 }
 var current_expression = "forward"
 @onready var last_expression = "forward"
+
+# Clothing and Items
+@export var hat: PackedScene
+var equipped_hat: Node3D  # Store the instantiated hat
 
 # Player ID Input Map
 var input_map = {
@@ -145,6 +158,7 @@ var input_map = {
 
 #READY FUNCTION
 func _ready():
+	
 	#set the camera up
 	camera_pivot.player_id = player_id
 	camera_pivot.camera.current = camera_toggle
@@ -169,13 +183,28 @@ func _ready():
 	# Set random initial timer durations
 	blink_timer.wait_time = randf_range(3.0, 6.0)
 	# Connect timer signals
-	blink_timer.timeout.connect(_on_blink_timer_timeout)
 	blink_timer.start()
-
+	
+	#clothes stuff
+	if hat != null:
+		equipped_hat = hat.instantiate()
+		head_bone.add_child(equipped_hat)
+		# Reset the transform to ensure proper positioning
+		equipped_hat.transform = Transform3D()
+		# Apply a rotation offset to correct orientation (adjust if needed)
+		equipped_hat.rotate_object_local(Vector3.RIGHT, deg_to_rad(-90)) 
+	
+	aim_direction = aim_cast.global_transform.basis.z 
+		
 #PHYSICS PROCESS (FASTEST UPDATE)
 func _physics_process(delta):
-	current_delta = delta
-	if not ragdoll_mode:# if not in ragdoll mode
+	if hat != null:
+		# Reset the transform to ensure proper positioning
+		equipped_hat.transform = Transform3D()
+		# Apply a rotation offset to correct orientation (adjust if needed)
+		equipped_hat.rotate_object_local(Vector3.RIGHT, deg_to_rad(-90)) 
+		
+	if not ragdoll_mode and not resetting_ragdoll:# if not in ragdoll mode
 		# rotate the physical bones toward the animated bones rotations using hookes law
 		for b:PhysicalBone3D in physics_bones:
 			var target_transform: Transform3D = static_skel.global_transform * static_skel.get_bone_global_pose(b.get_bone_id())
@@ -192,31 +221,37 @@ func _physics_process(delta):
 		var target_position = head_bone.global_position + Vector3(0, -1.3, 0) # Slight offset downwards
 		var displacement = target_position - body_bone.global_position
 		var linear_force = hookes_law(displacement, body_bone.linear_velocity, neck_spring_stiffness, neck_spring_damping)
-		body_bone.apply_central_impulse(linear_force * current_delta)
+		body_bone.apply_central_impulse(linear_force * delta)
 		
 		# Apply the same logic to the other pinned bones
-		pin_bones_to_marker(left_hip_pin,leftHip_bone, pin_spring_stiffness, pin_spring_damping, current_delta)
-		pin_bones_to_marker(right_hip_pin,rightHip_bone, pin_spring_stiffness, pin_spring_damping,current_delta)	
-		pin_bones_to_marker(left_shoulder_pin,leftShoulder_bone, pin_spring_stiffness, pin_spring_damping,current_delta)
-		pin_bones_to_marker(right_shoulder_pin,rightShoulder_bone, pin_spring_stiffness, pin_spring_damping,current_delta)
-		pin_bones_to_marker(left_leg_pin,left_leg_bone, pin_spring_stiffness/20, pin_spring_damping/10, current_delta)
-		pin_bones_to_marker(right_leg_pin,right_leg_bone, pin_spring_stiffness/20, pin_spring_damping/10,current_delta)
-		pin_bones_to_marker(left_arm_pin,left_arm_bone, pin_spring_stiffness/40, pin_spring_damping/10, current_delta)
+		pin_bones_to_marker(left_hip_pin,leftHip_bone, pin_spring_stiffness, pin_spring_damping, delta)
+		pin_bones_to_marker(right_hip_pin,rightHip_bone, pin_spring_stiffness, pin_spring_damping,delta)	
+		pin_bones_to_marker(left_shoulder_pin,leftShoulder_bone, pin_spring_stiffness, pin_spring_damping,delta)
+		pin_bones_to_marker(right_shoulder_pin,rightShoulder_bone, pin_spring_stiffness, pin_spring_damping,delta)
+		pin_bones_to_marker(left_leg_pin,left_leg_bone, pin_spring_stiffness/20, pin_spring_damping/10, delta)
+		pin_bones_to_marker(right_leg_pin,right_leg_bone, pin_spring_stiffness/20, pin_spring_damping/10,delta)
+		pin_bones_to_marker(left_arm_pin,left_arm_bone, pin_spring_stiffness/40, pin_spring_damping/10, delta)
 		if is_throwing:
-			pin_bones_to_marker(picked_dodgeball,right_arm_bone, pin_spring_stiffness/60, pin_spring_damping/40,current_delta)
+			pin_bones_to_marker(picked_dodgeball,right_arm_bone, pin_spring_stiffness/90, pin_spring_damping/40,delta)
 		else:
-			pin_bones_to_marker(right_arm_pin,right_arm_bone, pin_spring_stiffness/40, pin_spring_damping/10,current_delta)
+			pin_bones_to_marker(right_arm_pin,right_arm_bone, pin_spring_stiffness/40, pin_spring_damping/10,delta)
 		
 # PROCESS FUNCTION (NON PHYSICS)
 func _process(_delta):
 	
-	handle_input(_delta)
+	handle_input()
+	#Update the pickupShapeCast
 	shape_cast.global_transform = camera_pivot.global_transform
 	shape_cast.rotation.y += deg_to_rad(180)
 	shape_cast.rotation.x = -shape_cast.rotation.x
+	#Update the aim ShapeCast
+	aim_cast.global_transform = camera_pivot.global_transform
+	aim_cast.rotation.y += deg_to_rad(180)
+	aim_cast.rotation.x = -aim_cast.rotation.x
+	
 	if !ragdoll_mode:
 		move_character(_delta)		
-		handle_camera_swivel(_delta)
+		#handle_camera_swivel(_delta)
 		check_for_dodgeball_pickup()
 		
 		if picked_dodgeball != null and !is_throwing:
@@ -228,7 +263,7 @@ func _process(_delta):
 
 #~~~~~~~~~~~~~~ Character Control Functions ~~~~~~~~~~~~~
 #input handling
-func handle_input(delta):
+func handle_input():
 	if Input.is_action_just_pressed(input_map[player_id]["toggle_ragdoll"]):
 		ragdoll_mode = !ragdoll_mode
 		if ragdoll_mode == false:
@@ -271,7 +306,8 @@ func move_character(delta):
 		# Handle dodge movement
 		var current_speed = dodge_speed
 		var movement = velocity * current_speed * delta
-		translate(movement)
+		movement = global_transform.basis*movement
+		move_and_collide(movement)
 		dodge_timer -= delta
 		if dodge_timer <= 0:
 			is_dodging = false
@@ -279,30 +315,16 @@ func move_character(delta):
 		# Regular movement
 		var current_speed = move_speed
 		var movement = velocity * current_speed * delta
-		translate(movement)
+		movement = global_transform.basis*movement
+		move_and_collide(movement)
 		
 func set_expression(expression: String):
 	if face_animation_map.has(expression):
 		var expression_vec = face_animation_map[expression]
 		face_material.set_shader_parameter("expression_index", expression_vec)
 		current_expression = expression
-		
-func handle_camera_swivel(delta):
-	var mouse_delta = Input.get_last_mouse_velocity()
 
-	# Rotate the top node based on horizontal mouse movement
-	self.rotate_y(deg_to_rad(-mouse_delta.x * rotation_speed * delta * 0.01))
-
-	# Adjust vertical rotation with clamping
-	vertical_rotation -= mouse_delta.y * vertical_rotation_speed * delta * 0.01
-	vertical_rotation = clamp(vertical_rotation, -vertical_rotation_limit, vertical_rotation_limit)
-
-
-	
 #~~~~~~~~~~~~~~ Combat Functions ~~~~~~~~~~~~~
-
-
-
 func check_for_dodgeball_pickup():
 	if picked_dodgeball == null and Input.is_action_just_pressed(input_map[player_id]["secondary_action"]):
 		# Align the ShapeCast3D with the camera direction
@@ -326,31 +348,6 @@ func check_for_dodgeball_pickup():
 				picked_dodgeball.ball_owner = player_id
 				break  # Stop after picking up the first dodgeball
 
-#func check_for_dodgeball_pickup():
-	#if picked_dodgeball == null and Input.is_action_just_pressed(input_map[player_id]["secondary_action"]):
-		##This is a bunch of raycast code I stole
-		#var viewport_center = get_viewport().get_size() / 2
-		##Input.warp_mouse(viewport_center)$CursorControl/CursorTextureRect
-		#Input.warp_mouse($CursorControl/CursorTextureRect.position)
-		#var space_state = get_world_3d().direct_space_state
-		##var mousepos = get_viewport().get_mouse_position()
-		#var origin = camera_pivot.camera.project_ray_origin($CursorControl/CursorTextureRect.position)
-		#var end = origin + camera_pivot.camera.project_ray_normal($CursorControl/CursorTextureRect.position) * 200
-		#var query = PhysicsRayQueryParameters3D.create(origin, end)
-		#query.collide_with_areas = true
-		#
-		## Basically if you cast a ray until it intersect something and if that something is a ball pick it up
-		#var result = space_state.intersect_ray(query)
-		#print(result)
-		#if result.has("collider") and result["collider"] is RigidBody3D and result["collider"].name.begins_with("DodgeBall"):
-			## Check if the thing the ray hit is a ball and move it to the marker
-			#picked_dodgeball = result["collider"] as RigidBody3D
-			#picked_dodgeball.global_transform = dodgeball_marker.global_transform
-			#has_ball = true
-			#pull_back_progress = 0.0
-			#picked_dodgeball.ball_owner = player_id
-
-
 # Handle dodgeball throw mechanics
 func handle_dodgeball_throw(delta):
 
@@ -359,77 +356,99 @@ func handle_dodgeball_throw(delta):
 		# Gradually pull the dodgeball back
 		if not is_throwing:
 			# Initial setup for the throw, grab viewport, player position etc
-			var viewport_center = get_viewport().get_size() / 2
-			#Input.warp_mouse(viewport_center)
-			Input.warp_mouse($CursorControl/CursorTextureRect.position)
+			#var viewport_center = get_viewport().get_size() / 2
+			##Input.warp_mouse(viewport_center)
+			#Input.warp_mouse($CursorControl/CursorTextureRect.position)
 			initial_player_position = global_transform.origin
 		# This calculates how far the ball should be pulled back 
+		
+		aim_cast.global_transform = camera_pivot.global_transform
+		aim_cast.rotation.y += deg_to_rad(180)
+		aim_cast.rotation.x = -aim_cast.rotation.x
+		# Move the cast forward in the direction the camera is looking
+		#shape_cast.target_position = -shape_cast.transform.basis.z * 20.0  # Adjust range as needed
+
+		# Force an update so the new direction takes effect
+		aim_cast.force_shapecast_update()
+		
 		pull_back_progress = min(pull_back_progress + SLIDE_BACK_SPEED * delta, SLIDE_BACK_DIST)
 		is_throwing = true
-		
-		
-		# Determine the aiming direction based on the mouse position
-		#var mousepos = get_viewport().get_mouse_position()$CursorControl/CursorTextureRect
-		var ray_origin = camera_pivot.camera.project_ray_origin($CursorControl/CursorTextureRect.position)
-		var ray_normal = camera_pivot.camera.project_ray_normal($CursorControl/CursorTextureRect.position)
 
-		# Perform a raycast to find the first object hit
-		var space_state = get_world_3d().direct_space_state
-		var query = PhysicsRayQueryParameters3D.new()
+		# Default aim direction: Use AimMarker's full global orientation
+		aim_direction = aim_cast.global_transform.basis.z
 		
-		query.from = ray_origin
-		query.to = ray_origin + ray_normal * 1000  # Raycast range, adjust as needed
-		query.collide_with_areas = true
-		query.collide_with_bodies = true
-		
-		var intersection_point = space_state.intersect_ray(query)
+		# If the shape cast hits something, use that position to aim
+		if aim_cast.get_collision_count() > 0:
+			aimPoint = aim_cast.get_collision_point(0)  # Get first collision
+			aimObj = aim_cast.get_collider(0)
+#			Check that it isn't colliding with another players shape cast?
+			aim_direction = (aimPoint - picked_dodgeball.global_transform.origin).normalized()
+			
 
-		#DebugDraw3D.draw_line(picked_dodgeball.global_transform.origin, intersection_point.position, Color.RED)
-		if intersection_point:
-			DebugDraw3D.draw_line(picked_dodgeball.global_transform.origin, intersection_point.position, Color.RED)
-			
-			# This code could be useful if we find that aiming low causes too many problems			
-			if intersection_point.position.y < picked_dodgeball.global_transform.origin.y - 1.0:
-				intersection_point.position.y = picked_dodgeball.global_transform.origin.y + 1.0
-				
-			aim_direction = (intersection_point.position - picked_dodgeball.global_transform.origin).normalized()
-			DebugDraw3D.draw_line(picked_dodgeball.global_transform.origin, picked_dodgeball.global_transform.origin + 100*aim_direction, Color.GREEN)
-			var player_movement_delta = global_transform.origin - initial_player_position
-			var offset_transform = dodgeball_marker.global_transform
-			
-			# Here I basically pull the ball back in the opposite direction as the player is aiming, but I only really care about the z for now
-			var pullbackdirection = aim_direction
-			#pullbackdirection.x = 0
-			pullbackdirection.y = 0
-			pullbackdirection = pullbackdirection.normalized()
-			
-			# Here I am basically moving the ball back and trying to account for the player having moved so the ball doesn't appear stuck in space
-			offset_transform.origin -= pullbackdirection*(pull_back_progress)
-			offset_transform.origin += player_movement_delta
-			picked_dodgeball.global_transform = offset_transform
-			initial_player_position = global_transform.origin
-			
-			#DebugDraw3D.draw_line(picked_dodgeball.global_transform.origin, picked_dodgeball.global_transform.origin + aim_direction * 1000, Color.RED)
-			
+		DebugDraw3D.draw_line(picked_dodgeball.global_transform.origin, picked_dodgeball.global_transform.origin + (aim_direction * 100), Color.GREEN)
+
+		var player_movement_delta = global_transform.origin - initial_player_position
+		var offset_transform = dodgeball_marker.global_transform
+
+		# Compute pullback direction, preserving Y component
+		var pullbackdirection = aim_direction.normalized()
+
+		# Preserve the Y component only if it's significant (avoid setting it to 0)
+		if abs(pullbackdirection.y) < 0.05:  
+			pullbackdirection.y = 0  # Keep natural aim for most cases, but avoid unintended vertical snap
+
+		# Apply pullback based on aim direction
+		offset_transform.origin -= pullbackdirection * pull_back_progress
+		offset_transform.origin += player_movement_delta
+
+		picked_dodgeball.global_transform = offset_transform
+		initial_player_position = global_transform.origin
+
+
 	elif has_ball and Input.is_action_just_released(input_map[player_id]["primary_action"]):	
-		if aim_direction:
-			# Apply forward force to the dodgeball
-			var force = aim_direction * THROW_FORCE * pull_back_progress # Throw force is based on pull back progress
-			if force.y < 0:
-				force.y = 0
-			# Adjusting the force upwards based on the pull back progress (more up for harder throw)
-			force.y += 10*pull_back_progress
-			print("force: ", force)
-			
-			picked_dodgeball.global_transform.origin += aim_direction * 0.5  # Move ball forward slightly
-			picked_dodgeball.apply_central_impulse(force)
+		print("aim direction: ",aim_direction)
+		print("throw force: ",picked_dodgeball.THROW_FORCE)
+		print("pullback progress: ",pull_back_progress)
+		var force = aim_direction * picked_dodgeball.THROW_FORCE * pull_back_progress
 
-			#picked_dodgeball.apply_central_impulse(force)
-			picked_dodgeball = null
-			has_ball = false
-			pull_back_progress = 0.0
+		# Ensure force is always applied in the correct direction
+		#if force.y < 0:
+			#force.y = 0  # Prevent downward throws
+			#force.y += 2 * (pull_back_progress/SLIDE_BACK_DIST)
+		if force.y < 0:
+			force.y = 0
+		if (force.y < 14 && ( abs(force.z/force.y) > 2 || abs(force.x/force.y) > 2)) && aim_direction.y > -0.01:
+			force.y = 0  # Prevent downward throws
+			force.y = 14 * (pull_back_progress/SLIDE_BACK_DIST)
+		
+		if aimPoint:
+			if (aimPoint - picked_dodgeball.global_position).length() > 10 && aim_direction.y < .08:
+				if force.y < 14:
+					print("aimed too low at something far away, boosting")
+					force.y += 4 * (pull_back_progress/SLIDE_BACK_DIST)
+					if force.y < 8:
+						force.y = 8
+		# Add a slight upward boost
+		#force.y += 7 * pull_back_progress
 
-			is_throwing = false
+		print("Final Throw Force:", force)
+		if force.y < 20.0 and aimPoint != null:
+			print("Object we Are aim at: ", aimObj.name)
+			print("Object Position: ", aimObj.global_position)
+			print("aim Point Global Position: ", aimPoint)
+		# Move the ball slightly forward before applying impulse
+		picked_dodgeball.global_transform.origin += aim_direction * 0.5
+		picked_dodgeball.global_transform.origin += aim_direction * 0.5
+		# Apply force
+		picked_dodgeball.apply_central_impulse(force)
+
+		# Reset throwing state
+		picked_dodgeball = null
+		has_ball = false
+		pull_back_progress = 0.0
+		is_throwing = false
+		aimPoint = null
+		aimObj = null
 
 # Drop or place dodgeball (if needed)
 func drop_dodgeball():
@@ -458,17 +477,23 @@ func set_bone_damping():
 		bone.linear_damp = bone_linear_damping
 
 func reset_bone_positions():
-	var k = 0
-	while k < 2:
-		physical_skel.global_transform = static_skel.global_transform
-		for i in range(physics_bones.size()):
-			var active_bone = physics_bones[i]
-			var static_bone = static_skel.get_child(i)
-
-			if active_bone is PhysicalBone3D and static_bone is PhysicalBone3D:
-				active_bone.global_transform = static_bone.global_transform
-		k +=1
-
+	resetting_ragdoll = true
+	#print("starting Reset")
+	#var k = 0
+	#while k < 40:
+	physical_skel.global_transform = static_skel.global_transform
+	#static_skel.global_transform = $".".global_transform
+		#for i in range(physics_bones.size()):
+			#var active_bone = physics_bones[i]
+			##var static_bone_position = static_skel.get_bone_pose_position(i)
+			#var static_bone_position = static_skel.get_bone_global_pose(i)
+			##print("active Bone position: ", active_bone.position)
+			##print("static Bone position: ", static_bone_position)
+			##print("static bone pos adjusted: ", static_bone_position*static_skel.global_basis)
+			#active_bone.global_transform = static_bone_position
+		#k +=1
+	#print("reset_complete")
+	resetting_ragdoll = false
 #~~~~~~~~~~~~~ Signal Connection Functions ~~~~~~~~~~~~~~~~
 
 # Blink animation
@@ -489,7 +514,7 @@ func _on_hit_box_area_body_entered(body):
 		if body.ball_owner != player_id and body.ball_owner != null:
 			# Enable ragdoll mode
 			ragdoll_mode = true  
-
+			$RespawnTimer.start()
 			# Calculate the impact direction
 			var impact_direction = (body.global_position - body_bone.global_position).normalized()
 
@@ -502,6 +527,13 @@ func _on_hit_box_area_body_entered(body):
 			body.ball_owner = null
 			# Drop ball if you got it (the if is handled in the function)
 			drop_dodgeball()
+
+
+func _on_respawn_timer_timeout():
+	reset_bone_positions()
+	ragdoll_mode = false
+	set_expression("forward")
+
 
 #~~~~~~~~~~~~~ Extra Goodies ~~~~~~~~~~~~~~~~
 

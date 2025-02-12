@@ -38,5 +38,5 @@ func update_crosshair_position():
 	crosshair.position = viewport_center
 
 # Called every frame (adjust crosshair based on controller aim)
-func _process(delta):
+func _process(_delta):
 	update_crosshair_position()
