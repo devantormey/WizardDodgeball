@@ -83,6 +83,7 @@ var crosshair_offset = Vector2(-16,-15)
 var aimPoint = null
 var aimObj = null
 
+signal player_hit(player_id, attacker_id)  # Emit when hit by a dodgeball
 # This is the pickup cast I named it dumb
 @onready var shape_cast = $AimMarker/PickupShapeCast  # Reference the ShapeCast3D node
 # ShapeCast for Aiming
@@ -406,9 +407,9 @@ func handle_dodgeball_throw(delta):
 
 
 	elif has_ball and Input.is_action_just_released(input_map[player_id]["primary_action"]):	
-		print("aim direction: ",aim_direction)
-		print("throw force: ",picked_dodgeball.THROW_FORCE)
-		print("pullback progress: ",pull_back_progress)
+		#print("aim direction: ",aim_direction)
+		#print("throw force: ",picked_dodgeball.THROW_FORCE)
+		#print("pullback progress: ",pull_back_progress)
 		var force = aim_direction * picked_dodgeball.THROW_FORCE * pull_back_progress
 
 		# Ensure force is always applied in the correct direction
@@ -424,18 +425,18 @@ func handle_dodgeball_throw(delta):
 		if aimPoint:
 			if (aimPoint - picked_dodgeball.global_position).length() > 10 && aim_direction.y < .08:
 				if force.y < 14:
-					print("aimed too low at something far away, boosting")
+					#print("aimed too low at something far away, boosting")
 					force.y += 4 * (pull_back_progress/SLIDE_BACK_DIST)
 					if force.y < 8:
 						force.y = 8
 		# Add a slight upward boost
 		#force.y += 7 * pull_back_progress
 
-		print("Final Throw Force:", force)
-		if force.y < 20.0 and aimPoint != null:
-			print("Object we Are aim at: ", aimObj.name)
-			print("Object Position: ", aimObj.global_position)
-			print("aim Point Global Position: ", aimPoint)
+		#print("Final Throw Force:", force)
+		#if force.y < 20.0 and aimPoint != null:
+			#print("Object we Are aim at: ", aimObj.name)
+			#print("Object Position: ", aimObj.global_position)
+			#print("aim Point Global Position: ", aimPoint)
 		# Move the ball slightly forward before applying impulse
 		picked_dodgeball.global_transform.origin += aim_direction * 0.5
 		picked_dodgeball.global_transform.origin += aim_direction * 0.5
@@ -524,7 +525,12 @@ func _on_hit_box_area_body_entered(body):
 
 			# Apply the impulse to the body bone
 			body_bone.apply_central_impulse(impact_force)
+			
+			# Emit signal so the GameManager knows a player was hit
+			emit_signal("player_hit", player_id, body.ball_owner)
+			
 			body.ball_owner = null
+			
 			# Drop ball if you got it (the if is handled in the function)
 			drop_dodgeball()
 
@@ -533,21 +539,3 @@ func _on_respawn_timer_timeout():
 	reset_bone_positions()
 	ragdoll_mode = false
 	set_expression("forward")
-
-
-#~~~~~~~~~~~~~ Extra Goodies ~~~~~~~~~~~~~~~~
-
-#I can use this later if I want to active ragdoll animations
-#func _on_skeleton_3d_skeleton_updated():
-		#if not ragdoll_mode:# if not in ragdoll mode
-			## rotate the physical bones toward the animated bones rotations using hookes law
-			#for b:PhysicalBone3D in physics_bones:
-				##if not active_arm_left and b.name.contains("LArm"): continue # only rotated the arms if its activated
-				##if not active_arm_right and b.name.contains("RArm"): continue # only rotated the arms if its activated
-				#var target_transform: Transform3D = static_skel.global_transform * static_skel.get_bone_global_pose(b.get_bone_id())
-				#var current_transform: Transform3D = physical_skel.global_transform * physical_skel.get_bone_global_pose(b.get_bone_id())
-				#var rotation_difference: Basis = (target_transform.basis * current_transform.basis.inverse())
-				#var torque = hookes_law(rotation_difference.get_euler(), b.angular_velocity, angular_spring_stiffness, angular_spring_damping)
-				#torque = torque.limit_length(max_angular_force)
-				#
-				#b.angular_velocity += torque * current_delta

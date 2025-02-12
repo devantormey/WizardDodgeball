@@ -14,18 +14,6 @@ func _ready():
 	# Enable contact monitoring to detect collisions
 	contact_monitor = true
 
-# Called when a body enters the collision shape
-func on_body_entered(body):
-	if body and (body.name.begins_with("Ground") or body.name.begins_with("Wall") ):
-		#print("hitta dah ground")
-		ball_owner = null
-		if self.linear_velocity.length() > 1.0:
-			#print("speed was good")
-			var state = PhysicsServer3D.body_get_direct_state(body)
-			var collider_position = state.get_contact_collider_position(0)
-			collider_position.y += 1
-			spawn_effect(self.global_position)
-		
 func spawn_effect(spawn_position: Vector3):
 	if impact_effect:
 		var effect_instance = impact_effect.instantiate() as Node3D
@@ -45,3 +33,15 @@ func _on_respawn_timer_timeout():
 	reset_velocity()
 	global_position = start_position
 	out_of_bounds = false
+
+
+func _on_body_entered(body):
+	if body and (body.name.begins_with("Ground") or body.name.begins_with("Wall") ):
+		ball_owner = null
+		if self.linear_velocity.length() > 1.0:
+			#print("speed was good")
+			var state = PhysicsServer3D.body_get_direct_state(body)
+			var collider_position = state.get_contact_collider_position(0)
+			collider_position.y += 1
+#			the above didn't work so just spawn at our location for now
+			spawn_effect(self.global_position)

@@ -1,13 +1,14 @@
-[gd_scene load_steps=30 format=4 uid="uid://b3d6mr624uc82"]
+[gd_scene load_steps=31 format=4 uid="uid://b3d6mr624uc82"]
 
 [ext_resource type="PackedScene" uid="uid://bt1w7hf4yyyv2" path="res://map/ground.tscn" id="1_atrde"]
+[ext_resource type="PackedScene" uid="uid://bilm53qvxyr02" path="res://ui/score_control.tscn" id="1_tgec2"]
 [ext_resource type="PackedScene" uid="uid://bll34nka4arxh" path="res://objects/dodge_ball.tscn" id="2_q81di"]
 [ext_resource type="Texture2D" uid="uid://chgf4bdh8qvpr" path="res://map/map1_ground.png" id="3_83p3d"]
 [ext_resource type="Texture2D" uid="uid://ptlb3xuuksnd" path="res://map/stylized_nature_pack/Textures/Grass.png" id="4_q4yxl"]
 [ext_resource type="PackedScene" uid="uid://c2vsxhwp2hrwp" path="res://Player_toonWizard.tscn" id="5_12mh2"]
-[ext_resource type="PackedScene" uid="uid://depna016h3tux" path="res://objects/blink_hat.tscn" id="6_45f6m"]
 [ext_resource type="PackedScene" uid="uid://b62vu5kgan3t1" path="res://objects/fire_dodge_ball.tscn" id="6_uaqbl"]
 [ext_resource type="Script" path="res://map/ball_control.gd" id="7_kpgwj"]
+[ext_resource type="PackedScene" uid="uid://bsqiwrfx27qqr" path="res://ui/pause_menu.tscn" id="9_aso6v"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vluc2"]
 size = Vector3(55, 15, 2)
@@ -202,6 +203,8 @@ size = Vector3(80, 20, 100)
 
 [node name="Test_World" type="Node3D"]
 
+[node name="ScoreControl" parent="." instance=ExtResource("1_tgec2")]
+
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.46985, 0.464805, -0.750465, 0.270581, 0.733392, 0.623636, 0.840254, -0.496076, 0.218817, -633.153, 150.393, -24.403)
 shadow_enabled = true
@@ -331,7 +334,6 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 12.529
 player_id = 1
 camera_toggle = true
 splitscreen = true
-hat = ExtResource("6_45f6m")
 
 [node name="ViewportContainer2" type="SubViewportContainer" parent="GridContainer"]
 layout_mode = 2
@@ -365,5 +367,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.6595, 0, 0)
 shape = SubResource("BoxShape3D_gce0v")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("9_aso6v")]
 
 [connection signal="body_exited" from="BallControl" to="BallControl" method="_on_body_exited"]
