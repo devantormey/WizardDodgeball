@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://c05pmmqger0cm"
+path="res://.godot/imported/Cliff_Terrain_Path_Steps_Center_Top.obj-7378d83c8a7e4bc125b6f32ecf3a1f56.mesh"
+
+[deps]
+
+files=["res://.godot/imported/Cliff_Terrain_Path_Steps_Center_Top.obj-7378d83c8a7e4bc125b6f32ecf3a1f56.mesh"]
+
+source_file="res://map/Modular Terrain/Cliff_Terrain_Path_Steps_Center_Top.obj"
+dest_files=["res://.godot/imported/Cliff_Terrain_Path_Steps_Center_Top.obj-7378d83c8a7e4bc125b6f32ecf3a1f56.mesh", "res://.godot/imported/Cliff_Terrain_Path_Steps_Center_Top.obj-7378d83c8a7e4bc125b6f32ecf3a1f56.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

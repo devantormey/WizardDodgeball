@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://1320t4nsxosi"]
+[gd_scene load_steps=3 format=3 uid="uid://1320t4nsxosi"]
 
 [ext_resource type="Script" path="res://ui/main_menu.gd" id="1_e1q6m"]
+[ext_resource type="AudioStream" uid="uid://ch7yefsmca1og" path="res://soundFx/menuSong.wav" id="2_x7j1f"]
 
 [node name="Menu" type="Control"]
 layout_mode = 3
@@ -46,6 +47,11 @@ text = "Options"
 layout_mode = 2
 text = "Quit
 "
+
+[node name="MainMenuMusc" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_x7j1f")
+volume_db = -13.619
+autoplay = true
 
 [connection signal="button_up" from="MarginContainer/VBoxContainer/Play" to="." method="_on_play_button_up"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/SplitScreen" to="." method="_on_split_screen_pressed"]

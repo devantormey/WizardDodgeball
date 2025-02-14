@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=4 uid="uid://c2vsxhwp2hrwp"]
+[gd_scene load_steps=28 format=4 uid="uid://c2vsxhwp2hrwp"]
 
 [ext_resource type="Script" path="res://player_toon_wizard.gd" id="1_753qi"]
 [ext_resource type="Texture2D" uid="uid://b1c24nuu8k1p6" path="res://source_FBX_GLTF/cuteguy_skinMaterial.png" id="2_7irw7"]
@@ -6,6 +6,9 @@
 [ext_resource type="PackedScene" uid="uid://bhitpqsex5dg" path="res://ui/pivotCamera.tscn" id="2_ohpam"]
 [ext_resource type="Script" path="res://character/crosshair_control.gd" id="5_77oqi"]
 [ext_resource type="Texture2D" uid="uid://1ct3pd06lgal" path="res://ui/crosshair_small.png" id="6_eanpm"]
+[ext_resource type="AudioStream" uid="uid://bmpk5046wxw7i" path="res://soundFx/FF_IG_foley_punchbag_hit_video_game_hard.wav" id="7_dvjt1"]
+[ext_resource type="AudioStream" uid="uid://dvma3sfkhh4c6" path="res://soundFx/ESM_Animation_Whoosh10_Explainer_Video__Mobile_App_Game_Swish_Swoosh_Movement.wav" id="8_w4dec"]
+[ext_resource type="AudioStream" uid="uid://pdgp85lww2jy" path="res://soundFx/MNT_YTK_fx_jump.wav" id="9_cua1n"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8llvj"]
 radius = 2.5
@@ -526,7 +529,7 @@ transform = Transform3D(5.37412e-10, 0.00622278, 0.000678848, -0.0062597, 6.6148
 collision_mask = 3
 joint_type = 2
 joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.97405e-09, 4.54973e-07, 0.522871)
-body_offset = Transform3D(0.0062597, -3.71925e-15, 4.996e-16, 4.16334e-16, 1.45519e-09, -0.0062597, 3.83027e-15, 0.0062597, 1.45519e-09, -4.36557e-11, 0.00327302, -3.60887e-09)
+body_offset = Transform3D(0.0062597, -3.77476e-15, 5.27356e-16, 4.16334e-16, 1.45519e-09, -0.0062597, 3.83027e-15, 0.0062597, 1.45519e-09, -4.36557e-11, 0.00327302, -3.60887e-09)
 bone_name = "leg.l"
 joint_constraints/swing_span = 30.0
 joint_constraints/twist_span = 180.0
@@ -542,8 +545,8 @@ shape = SubResource("CapsuleShape3D_qa1c1")
 transform = Transform3D(-0.000290834, 1.97545e-11, -0.00625294, 4.14958e-10, -0.0062597, -3.90762e-11, -0.00625294, -4.16326e-10, 0.000290834, 0.00431034, 2.91038e-11, 0.00979953)
 collision_mask = 3
 joint_type = 5
-joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8687e-06, 1.57603e-15, 0.68933)
-body_offset = Transform3D(0.0062597, 1.94289e-16, -7.567e-10, -7.567e-10, 2.34188e-17, -0.0062597, -8.32667e-17, 0.0062597, -1.43115e-17, -1.11759e-08, 0.004315, 0)
+joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.86549e-06, 1.76706e-15, 0.68933)
+body_offset = Transform3D(0.0062597, 1.94289e-16, -7.27596e-10, -7.27596e-10, 2.34188e-17, -0.0062597, -8.32667e-17, 0.0062597, -1.60462e-17, -1.11759e-08, 0.004315, 0)
 bone_name = "shoulder.l"
 joint_constraints/x/linear_limit_enabled = true
 joint_constraints/x/linear_limit_upper = 0.0
@@ -618,7 +621,7 @@ transform = Transform3D(-0.00255047, -1.72958e-10, -0.00571655, 1.19257e-09, -0.
 collision_mask = 3
 joint_type = 2
 joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.04627e-06, 1.16235e-08, 0.379927)
-body_offset = Transform3D(0.0062597, 1.66533e-16, -1.16415e-09, -1.16415e-09, -2.67147e-16, -0.0062597, 1.11022e-16, 0.0062597, -3.64292e-16, -1.86265e-08, 0.00237823, -7.27596e-11)
+body_offset = Transform3D(0.0062597, 2.22045e-16, -1.16415e-09, -1.16415e-09, -2.81025e-16, -0.0062597, 1.11022e-16, 0.0062597, -3.64292e-16, -1.86265e-08, 0.00237823, -7.27596e-11)
 bone_name = "arm.l"
 joint_constraints/swing_span = 30.0
 joint_constraints/twist_span = 180.0
@@ -710,8 +713,8 @@ shape = SubResource("CapsuleShape3D_i3utu")
 transform = Transform3D(5.37412e-10, -0.00622278, -0.000678848, 0.0062597, 6.61483e-10, -1.10809e-09, 1.17329e-09, -0.000678848, 0.00622278, -0.00337201, 5.82077e-10, -0.00325376)
 collision_mask = 3
 joint_type = 2
-joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.32476e-09, 1.71961e-06, 0.522878)
-body_offset = Transform3D(0.0062597, 3.83027e-15, -6.93889e-16, -5.27356e-16, 1.45519e-09, -0.0062597, -3.94129e-15, 0.0062597, 1.45519e-09, -1.45519e-11, 0.00327306, -1.15251e-08)
+joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.32475e-09, 1.70101e-06, 0.522878)
+body_offset = Transform3D(0.0062597, 3.83027e-15, -6.10623e-16, -5.27356e-16, 1.45519e-09, -0.0062597, -3.94129e-15, 0.0062597, 1.45519e-09, -1.45519e-11, 0.00327306, -1.14087e-08)
 bone_name = "leg.r"
 joint_constraints/swing_span = 30.0
 joint_constraints/twist_span = 180.0
@@ -728,8 +731,8 @@ transform = Transform3D(-0.000290834, -1.97545e-11, 0.00625294, -4.14958e-10, -0
 collision_mask = 3
 axis_lock_angular_z = true
 joint_type = 5
-joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.09354e-07, 1.576e-15, 0.689333)
-body_offset = Transform3D(0.0062597, -1.94289e-16, 7.567e-10, 7.567e-10, 2.34188e-17, -0.0062597, 8.32667e-17, 0.0062597, -1.43115e-17, -5.58794e-09, 0.00431502, 0)
+joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.12559e-07, 1.76703e-15, 0.689333)
+body_offset = Transform3D(0.0062597, -1.94289e-16, 7.27596e-10, 7.27596e-10, 2.34188e-17, -0.0062597, 8.32667e-17, 0.0062597, -1.60462e-17, -5.58794e-09, 0.00431502, 0)
 bone_name = "shoulder.r"
 joint_constraints/x/linear_limit_enabled = true
 joint_constraints/x/linear_limit_upper = 0.0
@@ -804,7 +807,7 @@ transform = Transform3D(-0.00255047, 1.72958e-10, 0.00571655, -1.19257e-09, -0.0
 collision_mask = 3
 joint_type = 2
 joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.68219e-07, 9.29881e-09, 0.379929)
-body_offset = Transform3D(0.0062597, -1.66533e-16, 1.16415e-09, 1.16415e-09, -2.67147e-16, -0.0062597, -1.11022e-16, 0.0062597, -3.64292e-16, 1.86265e-09, 0.00237824, -5.82077e-11)
+body_offset = Transform3D(0.0062597, -2.22045e-16, 1.16415e-09, 1.16415e-09, -2.81025e-16, -0.0062597, -1.11022e-16, 0.0062597, -3.64292e-16, 1.86265e-09, 0.00237824, -5.82077e-11)
 bone_name = "arm.r"
 joint_constraints/swing_span = 30.0
 joint_constraints/twist_span = 180.0
@@ -1022,6 +1025,18 @@ physical_skel = NodePath("../ActiveArmature/Armature/Skeleton3D")
 [node name="RespawnTimer" type="Timer" parent="."]
 wait_time = 3.0
 one_shot = true
+
+[node name="HitSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_dvjt1")
+
+[node name="ThrowSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_w4dec")
+
+[node name="PickupSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("9_cua1n")
+volume_db = -14.857
+
+[node name="PullBackSound" type="AudioStreamPlayer" parent="."]
 
 [connection signal="timeout" from="BlinkTimer" to="." method="_on_blink_timer_timeout"]
 [connection signal="timeout" from="UnBlinkTimer" to="." method="_on_un_blink_timer_timeout"]

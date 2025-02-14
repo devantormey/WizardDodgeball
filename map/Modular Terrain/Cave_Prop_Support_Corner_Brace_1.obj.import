@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://cbd5oad441twc"
+path="res://.godot/imported/Cave_Prop_Support_Corner_Brace_1.obj-56e35a5a3fbb7bc240b4bd164dcdb0bd.mesh"
+
+[deps]
+
+files=["res://.godot/imported/Cave_Prop_Support_Corner_Brace_1.obj-56e35a5a3fbb7bc240b4bd164dcdb0bd.mesh"]
+
+source_file="res://map/Modular Terrain/Cave_Prop_Support_Corner_Brace_1.obj"
+dest_files=["res://.godot/imported/Cave_Prop_Support_Corner_Brace_1.obj-56e35a5a3fbb7bc240b4bd164dcdb0bd.mesh", "res://.godot/imported/Cave_Prop_Support_Corner_Brace_1.obj-56e35a5a3fbb7bc240b4bd164dcdb0bd.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

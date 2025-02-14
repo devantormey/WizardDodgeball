@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=4 uid="uid://b3d6mr624uc82"]
+[gd_scene load_steps=34 format=4 uid="uid://b3d6mr624uc82"]
 
 [ext_resource type="PackedScene" uid="uid://bt1w7hf4yyyv2" path="res://map/ground.tscn" id="1_atrde"]
 [ext_resource type="PackedScene" uid="uid://bilm53qvxyr02" path="res://ui/score_control.tscn" id="1_tgec2"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://bsqiwrfx27qqr" path="res://ui/pause_menu.tscn" id="9_aso6v"]
 [ext_resource type="ArrayMesh" uid="uid://dn338pe7nsrsk" path="res://map/Modular Terrain/Mountain_2.obj" id="10_fgqws"]
 [ext_resource type="ArrayMesh" uid="uid://c0ynj1r2dur3r" path="res://map/Modular Terrain/Mountain_3.obj" id="11_bu0pa"]
+[ext_resource type="AudioStream" uid="uid://dabn5miwhmpj2" path="res://soundFx/ZEN_STL_120_music_loop_blue_D#.wav" id="12_xdxxs"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vluc2"]
 size = Vector3(55, 15, 2)
@@ -203,7 +204,7 @@ sky = SubResource("Sky_0puc5")
 [sub_resource type="BoxShape3D" id="BoxShape3D_gce0v"]
 size = Vector3(80, 20, 100)
 
-[node name="Test_World" type="Node3D"]
+[node name="SplitScreenBattleArena" type="Node3D"]
 
 [node name="ScoreControl" parent="." instance=ExtResource("1_tgec2")]
 
@@ -379,5 +380,10 @@ mesh = ExtResource("10_fgqws")
 [node name="Mountain3" type="MeshInstance3D" parent="."]
 transform = Transform3D(8.25482, 0, 0, 0, 4.268, 0, 0, 0, 5.66375, 119.467, 1, -24.3041)
 mesh = ExtResource("11_bu0pa")
+
+[node name="LevelMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("12_xdxxs")
+volume_db = -16.096
+autoplay = true
 
 [connection signal="body_exited" from="BallControl" to="BallControl" method="_on_body_exited"]

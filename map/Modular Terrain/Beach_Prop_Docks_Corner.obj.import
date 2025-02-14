@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://hjg203dxo6oi"
+path="res://.godot/imported/Beach_Prop_Docks_Corner.obj-c3d1e5213cc1f63cc5a705b3255f075d.mesh"
+
+[deps]
+
+files=["res://.godot/imported/Beach_Prop_Docks_Corner.obj-c3d1e5213cc1f63cc5a705b3255f075d.mesh"]
+
+source_file="res://map/Modular Terrain/Beach_Prop_Docks_Corner.obj"
+dest_files=["res://.godot/imported/Beach_Prop_Docks_Corner.obj-c3d1e5213cc1f63cc5a705b3255f075d.mesh", "res://.godot/imported/Beach_Prop_Docks_Corner.obj-c3d1e5213cc1f63cc5a705b3255f075d.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://dem7hwysm1k7w"
+path="res://.godot/imported/Escarpment_Terrain_Side_Falloff_Center.obj-ded32f299124fe35ce7a01f96ab328ae.mesh"
+
+[deps]
+
+files=["res://.godot/imported/Escarpment_Terrain_Side_Falloff_Center.obj-ded32f299124fe35ce7a01f96ab328ae.mesh"]
+
+source_file="res://map/Modular Terrain/Escarpment_Terrain_Side_Falloff_Center.obj"
+dest_files=["res://.godot/imported/Escarpment_Terrain_Side_Falloff_Center.obj-ded32f299124fe35ce7a01f96ab328ae.mesh", "res://.godot/imported/Escarpment_Terrain_Side_Falloff_Center.obj-ded32f299124fe35ce7a01f96ab328ae.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

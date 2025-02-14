@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://b8cwo2euweacj"
+path="res://.godot/imported/Cliff_Terrain_Side_Falloff_Center.obj-db244e7654b4d1eb572a2d3274fc121a.mesh"
+
+[deps]
+
+files=["res://.godot/imported/Cliff_Terrain_Side_Falloff_Center.obj-db244e7654b4d1eb572a2d3274fc121a.mesh"]
+
+source_file="res://map/Modular Terrain/Cliff_Terrain_Side_Falloff_Center.obj"
+dest_files=["res://.godot/imported/Cliff_Terrain_Side_Falloff_Center.obj-db244e7654b4d1eb572a2d3274fc121a.mesh", "res://.godot/imported/Cliff_Terrain_Side_Falloff_Center.obj-db244e7654b4d1eb572a2d3274fc121a.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

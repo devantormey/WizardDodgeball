@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://bli6s4oy2mybr"
+path="res://.godot/imported/Hilly_Prop_Branch_3.obj-2f9e3a6a9ecdd81e8618d2f8087ba5eb.mesh"
+
+[deps]
+
+files=["res://.godot/imported/Hilly_Prop_Branch_3.obj-2f9e3a6a9ecdd81e8618d2f8087ba5eb.mesh"]
+
+source_file="res://map/Modular Terrain/Hilly_Prop_Branch_3.obj"
+dest_files=["res://.godot/imported/Hilly_Prop_Branch_3.obj-2f9e3a6a9ecdd81e8618d2f8087ba5eb.mesh", "res://.godot/imported/Hilly_Prop_Branch_3.obj-2f9e3a6a9ecdd81e8618d2f8087ba5eb.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false
