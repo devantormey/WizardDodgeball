@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://dodbu40yahple"
+path="res://.godot/imported/Mountain_1.obj-101dbe77d0fdf02b499be3a6f53f4648.mesh"
+
+[deps]
+
+files=["res://.godot/imported/Mountain_1.obj-101dbe77d0fdf02b499be3a6f53f4648.mesh"]
+
+source_file="res://map/Modular Terrain/Mountain_1.obj"
+dest_files=["res://.godot/imported/Mountain_1.obj-101dbe77d0fdf02b499be3a6f53f4648.mesh", "res://.godot/imported/Mountain_1.obj-101dbe77d0fdf02b499be3a6f53f4648.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

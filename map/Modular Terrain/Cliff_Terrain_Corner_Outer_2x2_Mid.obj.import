@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://ce8gmlixpk38i"
+path="res://.godot/imported/Cliff_Terrain_Corner_Outer_2x2_Mid.obj-8ccb0ae4ba38f097c8213a2577d50a7b.mesh"
+
+[deps]
+
+files=["res://.godot/imported/Cliff_Terrain_Corner_Outer_2x2_Mid.obj-8ccb0ae4ba38f097c8213a2577d50a7b.mesh"]
+
+source_file="res://map/Modular Terrain/Cliff_Terrain_Corner_Outer_2x2_Mid.obj"
+dest_files=["res://.godot/imported/Cliff_Terrain_Corner_Outer_2x2_Mid.obj-8ccb0ae4ba38f097c8213a2577d50a7b.mesh", "res://.godot/imported/Cliff_Terrain_Corner_Outer_2x2_Mid.obj-8ccb0ae4ba38f097c8213a2577d50a7b.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

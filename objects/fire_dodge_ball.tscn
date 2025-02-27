@@ -27,7 +27,7 @@ shader_parameter/EmberColor = Color(31.892, 2.703, 0.647, 1)
 [sub_resource type="QuadMesh" id="QuadMesh_jglw2"]
 lightmap_size_hint = Vector2i(7, 7)
 material = SubResource("ShaderMaterial_pdh2n")
-size = Vector2(0.1, 0.1)
+size = Vector2(0.2, 0.2)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_dcb57"]
 render_priority = 0

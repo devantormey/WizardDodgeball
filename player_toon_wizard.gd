@@ -236,7 +236,8 @@ func _physics_process(delta):
 			pin_bones_to_marker(picked_dodgeball,right_arm_bone, pin_spring_stiffness/90, pin_spring_damping/40,delta)
 		else:
 			pin_bones_to_marker(right_arm_pin,right_arm_bone, pin_spring_stiffness/40, pin_spring_damping/10,delta)
-		
+			
+		handle_dodgeball_throw(delta)
 # PROCESS FUNCTION (NON PHYSICS)
 func _process(_delta):
 	
@@ -258,7 +259,7 @@ func _process(_delta):
 		if picked_dodgeball != null and !is_throwing:
 			picked_dodgeball.global_transform = dodgeball_marker.global_transform
 
-		handle_dodgeball_throw(_delta)
+		
 	else:
 		set_expression("dead")
 
@@ -332,9 +333,7 @@ func check_for_dodgeball_pickup():
 		shape_cast.global_transform = camera_pivot.global_transform
 		shape_cast.rotation.y += deg_to_rad(180)
 		shape_cast.rotation.x = -shape_cast.rotation.x
-		# Move the cast forward in the direction the camera is looking
-		#shape_cast.target_position = -shape_cast.transform.basis.z * 20.0  # Adjust range as needed
-
+		
 		# Force an update so the new direction takes effect
 		shape_cast.force_shapecast_update()
 
@@ -344,6 +343,8 @@ func check_for_dodgeball_pickup():
 			if collider is RigidBody3D and collider.name.begins_with("DodgeBall"):
 				picked_dodgeball = collider
 				picked_dodgeball.global_transform = dodgeball_marker.global_transform
+				$PickupSound.pitch_scale = randf_range(0.8,1.3)
+				$PickupSound.play()
 				has_ball = true
 				pull_back_progress = 0.0
 				picked_dodgeball.ball_owner = player_id
@@ -356,19 +357,13 @@ func handle_dodgeball_throw(delta):
 
 		# Gradually pull the dodgeball back
 		if not is_throwing:
-			# Initial setup for the throw, grab viewport, player position etc
-			#var viewport_center = get_viewport().get_size() / 2
-			##Input.warp_mouse(viewport_center)
-			#Input.warp_mouse($CursorControl/CursorTextureRect.position)
 			initial_player_position = global_transform.origin
+			
 		# This calculates how far the ball should be pulled back 
-		
 		aim_cast.global_transform = camera_pivot.global_transform
 		aim_cast.rotation.y += deg_to_rad(180)
 		aim_cast.rotation.x = -aim_cast.rotation.x
-		# Move the cast forward in the direction the camera is looking
-		#shape_cast.target_position = -shape_cast.transform.basis.z * 20.0  # Adjust range as needed
-
+		
 		# Force an update so the new direction takes effect
 		aim_cast.force_shapecast_update()
 		
@@ -407,15 +402,9 @@ func handle_dodgeball_throw(delta):
 
 
 	elif has_ball and Input.is_action_just_released(input_map[player_id]["primary_action"]):	
-		#print("aim direction: ",aim_direction)
-		#print("throw force: ",picked_dodgeball.THROW_FORCE)
-		#print("pullback progress: ",pull_back_progress)
 		var force = aim_direction * picked_dodgeball.THROW_FORCE * pull_back_progress
 
-		# Ensure force is always applied in the correct direction
-		#if force.y < 0:
-			#force.y = 0  # Prevent downward throws
-			#force.y += 2 * (pull_back_progress/SLIDE_BACK_DIST)
+#		Monitoring for weird throws or accidentally aiming at the ground
 		if force.y < 0:
 			force.y = 0
 		if (force.y < 14 && ( abs(force.z/force.y) > 2 || abs(force.x/force.y) > 2)) && aim_direction.y > -0.01:
@@ -429,20 +418,14 @@ func handle_dodgeball_throw(delta):
 					force.y += 4 * (pull_back_progress/SLIDE_BACK_DIST)
 					if force.y < 8:
 						force.y = 8
-		# Add a slight upward boost
-		#force.y += 7 * pull_back_progress
-
-		#print("Final Throw Force:", force)
-		#if force.y < 20.0 and aimPoint != null:
-			#print("Object we Are aim at: ", aimObj.name)
-			#print("Object Position: ", aimObj.global_position)
-			#print("aim Point Global Position: ", aimPoint)
-		# Move the ball slightly forward before applying impulse
+		
+		# Move the ball slightly forward before applying impulse (this is to avoid physics jank)
 		picked_dodgeball.global_transform.origin += aim_direction * 0.5
-		picked_dodgeball.global_transform.origin += aim_direction * 0.5
+		picked_dodgeball.global_transform.origin += aim_direction * 0.5 #I do it twice because we must pray to the machine spirit
 		# Apply force
 		picked_dodgeball.apply_central_impulse(force)
-
+		$ThrowSound.pitch_scale = randf_range(0.8,1.3)
+		$ThrowSound.play()
 		# Reset throwing state
 		picked_dodgeball = null
 		has_ball = false
@@ -466,10 +449,11 @@ func hookes_law(displacement: Vector3, current_velocity: Vector3, stiffness: flo
 	return (stiffness * displacement) - (damping * current_velocity)
 
 func pin_bones_to_marker(target, bone, spring_stiffness, spring_damp, current_delta):
-	var target_position = target.global_position
-	var displacement = target_position - bone.global_position
-	var linear_force = hookes_law(displacement, bone.linear_velocity, spring_stiffness, spring_damp)
-	bone.apply_central_impulse(linear_force * current_delta)
+	if not ragdoll_mode:
+		var target_position = target.global_position
+		var displacement = target_position - bone.global_position
+		var linear_force = hookes_law(displacement, bone.linear_velocity, spring_stiffness, spring_damp)
+		bone.apply_central_impulse(linear_force * current_delta)
 
 #~~~~~~~~~~~~~ One Time Use Functions ~~~~~~~~~~~~~~~~~~~~
 func set_bone_damping():
@@ -477,24 +461,15 @@ func set_bone_damping():
 		bone.angular_damp = bone_angular_damping
 		bone.linear_damp = bone_linear_damping
 
-func reset_bone_positions():
+func reset_bone_positions(): #This is to move the skeletons back towards each other
 	resetting_ragdoll = true
-	#print("starting Reset")
-	#var k = 0
-	#while k < 40:
+	physical_skel.physical_bones_stop_simulation()
+	static_skel.global_transform.origin = $".".global_transform.origin
+	#for bone in physical_skel.get_bone_children():
+		#bone.p
 	physical_skel.global_transform = static_skel.global_transform
-	#static_skel.global_transform = $".".global_transform
-		#for i in range(physics_bones.size()):
-			#var active_bone = physics_bones[i]
-			##var static_bone_position = static_skel.get_bone_pose_position(i)
-			#var static_bone_position = static_skel.get_bone_global_pose(i)
-			##print("active Bone position: ", active_bone.position)
-			##print("static Bone position: ", static_bone_position)
-			##print("static bone pos adjusted: ", static_bone_position*static_skel.global_basis)
-			#active_bone.global_transform = static_bone_position
-		#k +=1
-	#print("reset_complete")
 	resetting_ragdoll = false
+	physical_skel.physical_bones_start_simulation()
 #~~~~~~~~~~~~~ Signal Connection Functions ~~~~~~~~~~~~~~~~
 
 # Blink animation
@@ -524,11 +499,14 @@ func _on_hit_box_area_body_entered(body):
 			var impact_force = -impact_direction * ball_velocity.length() * 5.0  # Scale force multiplier as needed
 
 			# Apply the impulse to the body bone
+			$HitSound.pitch_scale = randf_range(0.8,1.2)
+			$HitSound.play()
 			body_bone.apply_central_impulse(impact_force)
 			
 			# Emit signal so the GameManager knows a player was hit
 			emit_signal("player_hit", player_id, body.ball_owner)
-			
+			is_throwing = false
+			is_dodging = false
 			body.ball_owner = null
 			
 			# Drop ball if you got it (the if is handled in the function)

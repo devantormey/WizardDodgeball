@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://b4q7adisxtwin"
+path="res://.godot/imported/Cliff_Terrain_Hill_Sharp_Base.obj-8c525300918f345bdc332fabd192181e.mesh"
+
+[deps]
+
+files=["res://.godot/imported/Cliff_Terrain_Hill_Sharp_Base.obj-8c525300918f345bdc332fabd192181e.mesh"]
+
+source_file="res://map/Modular Terrain/Cliff_Terrain_Hill_Sharp_Base.obj"
+dest_files=["res://.godot/imported/Cliff_Terrain_Hill_Sharp_Base.obj-8c525300918f345bdc332fabd192181e.mesh", "res://.godot/imported/Cliff_Terrain_Hill_Sharp_Base.obj-8c525300918f345bdc332fabd192181e.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

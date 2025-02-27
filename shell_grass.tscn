@@ -1,0 +1,43 @@
+[gd_scene load_steps=7 format=3 uid="uid://dn2s03ttdp2ds"]
+
+[ext_resource type="Script" path="res://shell_grass.gd" id="1_hn7ec"]
+[ext_resource type="PackedScene" uid="uid://dbklmxrxyjayq" path="res://grass_layer.tscn" id="2_s12fp"]
+[ext_resource type="Script" path="res://base_camera_pivot.gd" id="3_pf7kb"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_o8ymv"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_g3r3w"]
+sky_material = SubResource("ProceduralSkyMaterial_o8ymv")
+
+[sub_resource type="Environment" id="Environment_dploe"]
+background_mode = 2
+sky = SubResource("Sky_g3r3w")
+tonemap_mode = 2
+glow_enabled = true
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_hn7ec")
+
+[node name="grass_layer" parent="." instance=ExtResource("2_s12fp")]
+visible = false
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_dploe")
+
+[node name="CameraPivot" type="Node3D" parent="." node_paths=PackedStringArray("target_node")]
+script = ExtResource("3_pf7kb")
+target_node = NodePath("../grass_layer")
+
+[node name="SpringArm3D" type="SpringArm3D" parent="CameraPivot"]
+collision_mask = 7
+spring_length = 2.0
+margin = 0.2
+
+[node name="Camera3D" type="Camera3D" parent="CameraPivot/SpringArm3D"]
+current = true

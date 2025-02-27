@@ -9,8 +9,9 @@ extends Control
 @onready var win_menu_animation = $CanvasLayer/WinMenu/AnimationPlayer
 @onready var restart = $CanvasLayer/WinMenu/PanelContainer2/VBoxContainer/Restart
 @onready var exit = $CanvasLayer/WinMenu/PanelContainer2/VBoxContainer/Exit
-
+@onready var win_timer = $WinTimer
 @export var score_to_win : int = 3
+@onready var winner = false
 
 func _ready():
 	win_menu_animation.play("RESET")
@@ -30,12 +31,15 @@ func pause():
 		restart.grab_focus()
 
 func _process(delta):
-	if team1_score >= score_to_win and !get_tree().paused:
+	if team1_score >= score_to_win and !get_tree().paused and !winner:
 		winnerLabel.text = "Team 1 Wins!"
-		pause()
-	if team2_score >= score_to_win and !get_tree().paused:
+		win_timer.start()
+		winner=true
+		print("starting win timer")
+	if team2_score >= score_to_win and !get_tree().paused and !winner:
 		winnerLabel.text = "Team 2 Wins!"
-		pause()
+		winner=true
+		win_timer.start()
 
 func _on_player_hit(player_id, attacker_id):
 	if player_id == 1:
@@ -56,3 +60,9 @@ func _on_restart_pressed():
 func _on_exit_pressed():
 	get_tree().paused = false
 	get_tree().change_scene_to_file("res://ui/Main_menu.tscn") # Replace with function body.
+
+
+func _on_win_timer_timeout():
+	print("win timer timed out")
+	$WinSound.play()
+	pause()

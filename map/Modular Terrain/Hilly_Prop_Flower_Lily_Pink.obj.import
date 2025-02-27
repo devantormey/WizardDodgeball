@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://cnqsunlmhidmx"
+path="res://.godot/imported/Hilly_Prop_Flower_Lily_Pink.obj-cd5ca516550425a3cca0b64ac5251f8a.mesh"
+
+[deps]
+
+files=["res://.godot/imported/Hilly_Prop_Flower_Lily_Pink.obj-cd5ca516550425a3cca0b64ac5251f8a.mesh"]
+
+source_file="res://map/Modular Terrain/Hilly_Prop_Flower_Lily_Pink.obj"
+dest_files=["res://.godot/imported/Hilly_Prop_Flower_Lily_Pink.obj-cd5ca516550425a3cca0b64ac5251f8a.mesh", "res://.godot/imported/Hilly_Prop_Flower_Lily_Pink.obj-cd5ca516550425a3cca0b64ac5251f8a.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

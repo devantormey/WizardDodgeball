@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://cjx2racvw3yme"
+path="res://.godot/imported/Cave_Cliff_Terrain_Entrance_Round_Top.obj-989c1c2d37c7e9d6e630b9b6fa2c8b34.mesh"
+
+[deps]
+
+files=["res://.godot/imported/Cave_Cliff_Terrain_Entrance_Round_Top.obj-989c1c2d37c7e9d6e630b9b6fa2c8b34.mesh"]
+
+source_file="res://map/Modular Terrain/Cave_Cliff_Terrain_Entrance_Round_Top.obj"
+dest_files=["res://.godot/imported/Cave_Cliff_Terrain_Entrance_Round_Top.obj-989c1c2d37c7e9d6e630b9b6fa2c8b34.mesh", "res://.godot/imported/Cave_Cliff_Terrain_Entrance_Round_Top.obj-989c1c2d37c7e9d6e630b9b6fa2c8b34.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

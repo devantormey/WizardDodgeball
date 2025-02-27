@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://q8h6y8s3d752"
+path="res://.godot/imported/Hilly_Prop_Hollow_Trunk.obj-fc3d0edb67196751f350a8ce5e6fe03e.mesh"
+
+[deps]
+
+files=["res://.godot/imported/Hilly_Prop_Hollow_Trunk.obj-fc3d0edb67196751f350a8ce5e6fe03e.mesh"]
+
+source_file="res://map/Modular Terrain/Hilly_Prop_Hollow_Trunk.obj"
+dest_files=["res://.godot/imported/Hilly_Prop_Hollow_Trunk.obj-fc3d0edb67196751f350a8ce5e6fe03e.mesh", "res://.godot/imported/Hilly_Prop_Hollow_Trunk.obj-fc3d0edb67196751f350a8ce5e6fe03e.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

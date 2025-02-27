@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://dbklmxrxyjayq"]
+
+[ext_resource type="Shader" uid="uid://d0bbk0k8gcron" path="res://shell_grass.tres" id="1_mls8h"]
+[ext_resource type="Texture2D" uid="uid://b3yhr3cp1mxx5" path="res://grass_randm_noise.png" id="2_6k6v1"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_pospd"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_whpc2"]
+render_priority = 0
+shader = ExtResource("1_mls8h")
+shader_parameter/grass_color = Vector3(0.2, 0.8, 0.2)
+shader_parameter/dirt_color = Vector3(0, 0, 0)
+shader_parameter/threshold_base = 0.3
+shader_parameter/threshold_growth = 0.8
+shader_parameter/wind_strength = 0.1
+shader_parameter/wind_speed = 1.0
+shader_parameter/time_offset = 0.0
+shader_parameter/wind_amplitude = 0.5
+shader_parameter/layer_height = null
+shader_parameter/noise_texture = ExtResource("2_6k6v1")
+
+[node name="grass_layer" type="MeshInstance3D"]
+mesh = SubResource("PlaneMesh_pospd")
+surface_material_override/0 = SubResource("ShaderMaterial_whpc2")

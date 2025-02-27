@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://v50sru36bvn1"
+path="res://.godot/imported/Cave_Terrain_Hill_Side_Overlap_Side.obj-d860f58695ea4b6fdaba576b5611ca99.mesh"
+
+[deps]
+
+files=["res://.godot/imported/Cave_Terrain_Hill_Side_Overlap_Side.obj-d860f58695ea4b6fdaba576b5611ca99.mesh"]
+
+source_file="res://map/Modular Terrain/Cave_Terrain_Hill_Side_Overlap_Side.obj"
+dest_files=["res://.godot/imported/Cave_Terrain_Hill_Side_Overlap_Side.obj-d860f58695ea4b6fdaba576b5611ca99.mesh", "res://.godot/imported/Cave_Terrain_Hill_Side_Overlap_Side.obj-d860f58695ea4b6fdaba576b5611ca99.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false
