@@ -463,10 +463,13 @@ func set_bone_damping():
 
 func reset_bone_positions(): #This is to move the skeletons back towards each other
 	resetting_ragdoll = true
+	physical_skel.physical_bones_stop_simulation()
 	static_skel.global_transform.origin = $".".global_transform.origin
-	
+	#for bone in physical_skel.get_bone_children():
+		#bone.p
 	physical_skel.global_transform = static_skel.global_transform
 	resetting_ragdoll = false
+	physical_skel.physical_bones_start_simulation()
 #~~~~~~~~~~~~~ Signal Connection Functions ~~~~~~~~~~~~~~~~
 
 # Blink animation
